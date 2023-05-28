@@ -23,8 +23,8 @@ namespace CourseProject.BLL.Interfaces
 
         public void CreateDetails(OrderDetail detail);
 
-        public void Delete(int id);
+        public void Delete(CustomerOrder order);
 
-        public void DeleteDetails(int id);
+        public void DeleteDetails(OrderDetail detail);
     }
 }
