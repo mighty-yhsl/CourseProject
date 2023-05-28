@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 using CourseProject.BLL.Interfaces;
 using CourseProject.DAL.Models.EF;
+
 namespace CourseProject.BLL.Services
 {
     public class TransportService
@@ -56,7 +57,7 @@ namespace CourseProject.BLL.Services
         {
             if (transport is null || transport.Name.IsNullOrEmpty())
             {
-                throw new ArgumentException("transport is null or fields of transport is null");
+                throw new ArgumentException("Transport is null or fields of Transport is null");
             }
             if (transport.Price < 0)
             {
