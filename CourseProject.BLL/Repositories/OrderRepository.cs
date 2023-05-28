@@ -77,7 +77,13 @@ namespace CourseProject.BLL.Repositories
             _shopContext.Database.ExecuteSqlRaw("DELETE FROM OrderDetails WHERE Id = @0", detail.Id);
         }
 
-        public CustomerOrder GetOrder(int id)
+        public OrderDetail GetDetails(int id)
+        {
+            return _shopContext.OrderDetails.FromSqlRaw("SELECT * FROM OrderDetail WHERE Id = @0", +
+               id).FirstOrDefault();
+        }
+
+            public CustomerOrder GetOrder(int id)
         {
             return _shopContext.CustomerOrders.FromSqlRaw("SELECT * FROM CustomerOrder WHERE Id = @0", +
                id).FirstOrDefault();

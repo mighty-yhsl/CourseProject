@@ -13,6 +13,7 @@ namespace CourseProject.BLL.Interfaces
     {
         public CustomerOrder GetOrder(int id);
 
+        public OrderDetail GetDetails(int id);
         public IEnumerable<CustomerOrder> GetOrders();
 
         public void Create(CustomerOrder order, List<OrderDetail> orderDetails);
