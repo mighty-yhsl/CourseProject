@@ -34,5 +34,29 @@ namespace CourseProject.Controllers
                 return View("Create");
             }
         }
+
+        public ActionResult Delete([FromServices] TransportService transportService, int id)
+        {
+            try
+            {
+                transportService.DeleteTransport(id);
+                return Redirect("/transport/GetAllTransports");
+            }
+            catch (ArgumentException ex)
+            {
+                return Redirect("/transport/GetAllTransports");
+            }
+        }
+
+        public ActionResult Update([FromServices] TransportRepository transportReposiory,
+            [FromServices] TransportService transportService, int id)
+        {
+            var transport = transportReposiory.Get(id);
+            if (transportReposiory is null)
+            { 
+                 return Redirect("/transport/GetAllTransports");
+            }
+            return View();
+        }
     }
 }
