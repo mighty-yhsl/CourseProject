@@ -4,37 +4,43 @@
     ViewData["Title"] = "GetAllTransports";
 }
 
-<h1>GetAllTransports</h1>
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+
+<h1 class="center">Електротранспорт</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Додати новый">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.Label("Назва")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Speed)
+                @Html.Label("Швидкість")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weightt)
+                @Html.Label("Вага")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EnginePower)
+                @Html.Label("Потужність")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                @Html.Label("Наявність")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.Label("Ціна")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
+                @Html.Label("Категорія")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ManufacturerId)
+                @Html.Label("Виробник")
             </th>
             <th></th>
         </tr>
@@ -61,14 +67,14 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ManufacturerId)
+                @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Редагувати", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Видалити", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-primary" })
             </td>
         </tr>
 }
