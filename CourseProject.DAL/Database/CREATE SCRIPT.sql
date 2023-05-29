@@ -17,17 +17,17 @@ Email NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
 
 CREATE TABLE Category(
 Id int not null primary key identity(1,1),
-[Name] NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
+CategoryName NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
 );
 
 CREATE TABLE Manufacturer(
 Id int not null primary key identity(1,1),
-[Name] NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
+ManufacturerName NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
 );
 
 CREATE TABLE StatusOrder(
 Id int not null primary key identity(1,1),
-[Name] NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
+StatusOrderName NVARCHAR(40) Collate Cyrillic_General_CI_AS not null
 );
 
 CREATE TABLE CustomerOrder(

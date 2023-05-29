@@ -14,11 +14,10 @@ namespace CourseProject.BLL.Dependency_Injection
     {
         public static void AddDependencies(this IServiceCollection services) 
         {
-            services.AddTransient<ITransportRepository, TransportRepository>();
-            services.AddTransient<IOrderRepository, OrderRepository>();
-            services.AddTransient<ICustomerRepository, CustomerRepository>();
-            services.AddTransient<ISellerRepository, SellerRepository>();
-            services.AddDbContext<ShopContext>();
+            services.AddTransient<TransportRepository>();
+            services.AddTransient<OrderRepository>();
+            services.AddTransient<CustomerRepository>();
+            services.AddTransient<SellerRepository>();
         }
     }
 }

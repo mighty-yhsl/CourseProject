@@ -7,7 +7,7 @@ public partial class StatusOrder
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string StatusOrderName { get; set; } = null!;
 
     public virtual ICollection<CustomerOrder> CustomerOrders { get; set; } = new List<CustomerOrder>();
 }

@@ -1,63 +1,120 @@
-﻿using CourseProject.BLL.Interfaces;
-using CourseProject.DAL.Models.EF;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CourseProject.DAL.Models.EF;
 
 namespace CourseProject.BLL.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : Repository<Customer>
     {
-        private ShopContext _shopContext;
+        private const string CREATE_QUERY = "INSERT INTO Customer(CustomerName, CustomerSurname, Phone, Email, Addres) Values(@CustomerName, @CustomerSurname, @Phone, @Email, @Addres)";
+        private const string DELETE_QUERY = "DELETE FROM Customer WHERE Id = @Id";
+        private const string UPDATE_QUERY = "UPDATE Customer SET CustomerName = @CustomerName, CustomerSurname = @CustomerSurname, Phone = @Phone, Email = @Email, Addres = @Addres WHERE Id = @Id";
+        private const string GET_BY_ID_QUERY = "SELECT c.Id, c.CustomerName, c.CustomerSurname, c.Phone, c.Email, c.Addres FROM Customer c WHERE c.Id = @Id";
+        private const string GET_QUERY = "SELECT c.Id, c.CustomerName, c.CustomerSurname, c.Phone, c.Email, c.Addres FROM Customer c";
 
-        public CustomerRepository(ShopContext shopContext)
+
+        public CustomerRepository(IConfiguration configuration) : base(configuration)
         {
-            _shopContext = shopContext;
+
         }
 
-        public void Create(Customer customer)
+        public CustomerRepository() { }
+
+        public override void Create(Customer entity)
         {
-            _shopContext.Database.ExecuteSqlRaw("INSERT INTO Customer(CustomerName,CustomerSurname,Phone,Email," +
-                "Addres) Values" +
-                "(@0,@1,@2,@3,@4,@5)",
-                new SqlParameter("@0", customer.CustomerName),
-                new SqlParameter("@1", customer.CustomerSurname),
-                new SqlParameter("@2", customer.Phone),
-                new SqlParameter("@3", customer.Email),
-                new SqlParameter("@4", customer.Addres));
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@CustomerName", entity.CustomerName),
+                new SqlParameter("@CustomerSurname", entity.CustomerSurname),
+                new SqlParameter("@Phone", entity.Phone),
+                new SqlParameter("@Email", entity.Email),
+                new SqlParameter("@Addres", entity.Addres)
+            };
+            ExecuteScalarCommand(CREATE_QUERY, parameters);
         }
 
-        public void Delete(Customer customer)
+        public override void Delete(Customer entity)
         {
-            _shopContext.Database.ExecuteSqlRaw("DELETE FROM Customer WHERE Id = @0", customer.Id);
+            var parameters = new SqlParameter[] { new SqlParameter("@Id", entity.Id) };
+            ExecuteCommand(DELETE_QUERY, parameters);
         }
 
-        public Customer GetCustomer(int id)
+        public override Customer Get(int id)
         {
-            return _shopContext.Customers.FromSqlRaw("SELECT * FROM Customer WHERE Id = @0", +
-                id).FirstOrDefault();
+            Customer customer = new Customer();
+            using (var connection = new SqlConnection(con))
+            {
+                SqlParameter parameter = new SqlParameter("@Id", id);
+                connection.Open();
+                using (var command = new SqlCommand(GET_BY_ID_QUERY, connection))
+                {
+                    command.Parameters.Add(parameter);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            customer.Id = Convert.ToInt32(reader["Id"]);
+                            customer.CustomerName = Convert.ToString(reader["CustomerName"]);
+                            customer.CustomerSurname = Convert.ToString(reader["CustomerSurname"]);
+                            customer.Phone = Convert.ToString(reader["Phone"]);
+                            customer.Email = Convert.ToString(reader["Email"]);
+                            customer.Addres = Convert.ToString(reader["Addres"]);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return customer;
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public override IEnumerable<Customer> Get()
         {
-            return _shopContext.Customers.FromSqlRaw("SELECT * FROM Customer").AsEnumerable();
+            List<Customer> customers = new List<Customer>();
+
+            using (var connection = new SqlConnection(con))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(GET_QUERY, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Customer customer = new Customer();
+                            customer.Id = Convert.ToInt32(reader["Id"]);
+                            customer.CustomerName = Convert.ToString(reader["CustomerName"]);
+                            customer.CustomerSurname = Convert.ToString(reader["CustomerSurname"]);
+                            customer.Phone = Convert.ToString(reader["Phone"]);
+                            customer.Email = Convert.ToString(reader["Email"]);
+                            customer.Addres = Convert.ToString(reader["Addres"]);
+
+                            customers.Add(customer);
+                        }
+                    }
+                }
+            }
+            return customers;
         }
 
-        public void Update(Customer customer)
+        public override void Update(Customer entity)
         {
-            _shopContext.Database.ExecuteSqlRaw("UPDATE Customer SET CustomerName = @0, CustomerSurname = @1, Phone = @2, Email = @3," +
-                 "Addres = @4  WHERE Id = @5",
-                 new SqlParameter("@0", customer.CustomerName),
-                 new SqlParameter("@1", customer.CustomerSurname),
-                 new SqlParameter("@2", customer.Phone),
-                 new SqlParameter("@3", customer.Email),
-                 new SqlParameter("@4", customer.Addres),
-                 new SqlParameter("@5", customer.Id));
-            //_shopContext.SaveChanges();
+            var parameters = new SqlParameter[] {
+            new SqlParameter("@CustomerName", entity.CustomerName),
+            new SqlParameter("@CustomerSurname", entity.CustomerSurname),
+            new SqlParameter("@Phone", entity.Phone),
+            new SqlParameter("@Email", entity.Email),
+            new SqlParameter("@Addres", entity.Addres),
+            };
+            ExecuteCommand(UPDATE_QUERY, parameters);
+
         }
     }
 }

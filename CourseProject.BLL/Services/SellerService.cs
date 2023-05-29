@@ -7,15 +7,15 @@ using Microsoft.IdentityModel.Tokens;
 using CourseProject.BLL.Interfaces;
 using CourseProject.DAL.Models.EF;
 using CourseProject.BLL.Repositories;
-
+using CourseProject.BLL.Repositories;
 
 namespace CourseProject.BLL.Services
 {
     public class SellerService
     {
-        private ISellerRepository _sellerRepository;
+        private SellerRepository _sellerRepository;
 
-        public SellerService(ISellerRepository sellerRepository)
+        public SellerService(SellerRepository sellerRepository)
         {
             _sellerRepository = sellerRepository;
         }
@@ -49,7 +49,7 @@ namespace CourseProject.BLL.Services
 
         public void DeleteSeller(int id)
         {
-            var seller = _sellerRepository.GetSeller(id);
+            var seller = _sellerRepository.Get(id);
             if (seller is null)
                 throw new InvalidOperationException($"Seller with id {id} is not found");
             _sellerRepository.Delete(seller);

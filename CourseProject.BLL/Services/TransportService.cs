@@ -6,15 +6,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 using CourseProject.BLL.Interfaces;
+using CourseProject.BLL.Repositories;
 using CourseProject.DAL.Models.EF;
 
 namespace CourseProject.BLL.Services
 {
     public class TransportService
     {
-        private ITransportRepository _transportRepository;
+        private TransportRepository _transportRepository;
 
-        public TransportService(ITransportRepository transportRepository)
+        public TransportService(TransportRepository transportRepository)
         {
             _transportRepository = transportRepository;
         }
@@ -47,7 +48,7 @@ namespace CourseProject.BLL.Services
 
         public void DeleteProduct(int id)
         {
-            var transport = _transportRepository.GetTransport(id);
+            var transport = _transportRepository.Get(id);
             if (transport is null)
                 throw new InvalidOperationException($"Transport with id {id} is not found");
             _transportRepository.Delete(transport);

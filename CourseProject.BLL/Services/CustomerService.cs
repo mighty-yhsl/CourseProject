@@ -12,9 +12,9 @@ namespace CourseProject.BLL.Services
 {
     public class CustomerService
     {
-        private ICustomerRepository _customerRepository;
+        private CustomerRepository _customerRepository;
 
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(CustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }
@@ -48,7 +48,7 @@ namespace CourseProject.BLL.Services
 
         public void DeleteCustomer(int id)
         {
-            var customer = _customerRepository.GetCustomer(id);
+            var customer = _customerRepository.Get(id);
             if (customer is null)
                 throw new InvalidOperationException($"Customer with id {id} is not found");
             _customerRepository.Delete(customer);
