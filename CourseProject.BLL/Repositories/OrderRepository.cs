@@ -35,12 +35,12 @@ namespace CourseProject.BLL.Repositories
         {
             var parameters = new SqlParameter[]
             {
-                new SqlParameter("@OperatorId", entity.Description),
-                new SqlParameter("@OrderStatusId", entity.CreateDate),
-                new SqlParameter("@OrderDate", entity.UpdateDate),
-                new SqlParameter("@CustomerName", entity.SellerId),
-                new SqlParameter("@CustomerName", entity.CustomerId),
-                new SqlParameter("@CustomerName", entity.StatusId)
+                new SqlParameter("@Description", entity.Description),
+                new SqlParameter("@CreateDate", entity.CreateDate),
+                new SqlParameter("@UpdateDate", entity.UpdateDate),
+                new SqlParameter("@SellerId", entity.SellerId),
+                new SqlParameter("@CustomerId", entity.CustomerId),
+                new SqlParameter("@StatusId", entity.StatusId)
             };
             var customerOrderId = (int)ExecuteScalarCommand(CREATE_QUERY, parameters);
             foreach (var detail in entity.OrderDetails)
