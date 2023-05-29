@@ -32,10 +32,6 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("Name was greater then max length value");
             }
-            if (transport is null || transport.Name.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Transport is null or fields of Transport is null");
-            }
         }
 
         public void Validate(Manufacturer manufacturer) 

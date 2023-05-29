@@ -23,13 +23,11 @@ namespace CourseProject.BLL.Services
             _transportValidator = transportValidator;
             _transportRepository = transportRepository;
         }
-        public void CreateTransport(Transport transport, Category category, Manufacturer manufacturer)
+        public void CreateTransport(Transport transport)
         {
             try
             {
                 _transportValidator.Validate(transport);
-                _transportValidator.Validate(category);
-                _transportValidator.Validate(manufacturer);
             }
             catch (ArgumentException)
             {
@@ -39,13 +37,11 @@ namespace CourseProject.BLL.Services
             _transportRepository.Create(transport);
         }
 
-        public void UpdateTransport(Transport transport, Category category, Manufacturer manufacturer)
+        public void UpdateTransport(Transport transport)
         {
             try
             {
                 _transportValidator.Validate(transport);
-                _transportValidator.Validate(category);
-                _transportValidator.Validate(manufacturer);
             }
             catch (ArgumentException)
             {

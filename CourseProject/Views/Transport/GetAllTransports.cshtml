@@ -73,8 +73,8 @@
                 @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
             </td>
             <td>
-                    @Html.ActionLink("Редагувати", "Edit", new {  id=item.Id  }, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Видалити", "Delete", new {  id=item.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new {  id=item.Id }, new { @class = "btn btn-primary" })
             </td>
         </tr>
 }

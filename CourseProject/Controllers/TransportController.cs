@@ -40,11 +40,11 @@ namespace CourseProject.Controllers
             try
             {
                 transportService.DeleteTransport(id);
-                return Redirect("/transport/GetAllTransports");
+                return Redirect("/Transport/GetAllTransports");
             }
             catch (ArgumentException ex)
             {
-                return Redirect("/transport/GetAllTransports");
+                return Redirect("/Transport/GetAllTransports");
             }
         }
 

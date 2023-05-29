@@ -1,6 +1,7 @@
 ﻿using CourseProject.BLL.Interfaces;
 using CourseProject.BLL.Repositories;
 using CourseProject.BLL.Services;
+using CourseProject.BLL.Validators;
 using CourseProject.DAL.Models.EF;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,6 +21,7 @@ namespace CourseProject.BLL.Dependency_Injection
             services.AddTransient<CustomerRepository>();
             services.AddTransient<SellerRepository>();
             services.AddTransient<TransportService>();
+            services.AddTransient<TransportValidator>();
         }
     }
 }
