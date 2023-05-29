@@ -46,11 +46,11 @@ namespace CourseProject.BLL.Repositories
             foreach (var detail in entity.OrderDetails)
             {
                 detail.CustomerOrderId = customerOrderId;
-                CreateDetail(detail);
+                CreateDetails(detail);
             }
         }
 
-        public void CreateDetail(OrderDetail order)
+        public void CreateDetails(OrderDetail order)
         {
             var parameters = new SqlParameter[]
             {

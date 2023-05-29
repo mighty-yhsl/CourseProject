@@ -8,22 +8,28 @@ using System.Threading.Tasks;
 using CourseProject.BLL.Interfaces;
 using CourseProject.BLL.Repositories;
 using CourseProject.DAL.Models.EF;
+using CourseProject.BLL.Validators;
+using Azure;
 
 namespace CourseProject.BLL.Services
 {
     public class TransportService
     {
+        private TransportValidator _transportValidator;
         private TransportRepository _transportRepository;
 
-        public TransportService(TransportRepository transportRepository)
+        public TransportService(TransportRepository transportRepository, TransportValidator transportValidator)
         {
+            _transportValidator = transportValidator;
             _transportRepository = transportRepository;
         }
-        public void CreateTransport(Transport transport)
+        public void CreateTransport(Transport transport, Category category, Manufacturer manufacturer)
         {
             try
             {
-                Validate(transport);
+                _transportValidator.Validate(transport);
+                _transportValidator.Validate(category);
+                _transportValidator.Validate(manufacturer);
             }
             catch (ArgumentException)
             {
@@ -33,11 +39,13 @@ namespace CourseProject.BLL.Services
             _transportRepository.Create(transport);
         }
 
-        public void UpdateTransport(Transport transport)
+        public void UpdateTransport(Transport transport, Category category, Manufacturer manufacturer)
         {
             try
             {
-                Validate(transport);
+                _transportValidator.Validate(transport);
+                _transportValidator.Validate(category);
+                _transportValidator.Validate(manufacturer);
             }
             catch (ArgumentException)
             {
@@ -46,7 +54,7 @@ namespace CourseProject.BLL.Services
             _transportRepository.Update(transport);
         }
 
-        public void DeleteProduct(int id)
+        public void DeleteTransport(int id)
         {
             var transport = _transportRepository.Get(id);
             if (transport is null)
@@ -54,28 +62,14 @@ namespace CourseProject.BLL.Services
             _transportRepository.Delete(transport);
         }
 
-        private void Validate(Transport transport)
+        public IEnumerable<Transport> Get()
         {
-            if (transport is null || transport.Name.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Transport is null or fields of Transport is null");
-            }
-            if (transport.Price < 0)
-            {
-                throw new ArgumentException("Price should be greater or equals 0");
-            }
-            if (transport.Amount < 1)
-            {
-                throw new ArgumentException("Amount should be greater or equals 1");
-            }
-            if (transport.Speed < 1 && transport.Weightt < 1 && transport.EnginePower < 1)
-            {
-                throw new ArgumentException("One of string fields was greater or equals 1");
-            }
-            if (transport.Name.Length > 64)
-            {
-                throw new ArgumentException("Name was greater then max length value");
-            }
+            return _transportRepository.Get();
+        }
+
+        public Transport Get(int id)
+        {
+            return _transportRepository.Get(id);
         }
     }
 }

@@ -7,15 +7,18 @@ using Microsoft.IdentityModel.Tokens;
 using CourseProject.BLL.Interfaces;
 using CourseProject.DAL.Models.EF;
 using CourseProject.BLL.Repositories;
+using CourseProject.BLL.Validators;
 
 namespace CourseProject.BLL.Services
 {
     public class CustomerService
     {
+        private CustomerValidator _customerValidator;
         private CustomerRepository _customerRepository;
 
-        public CustomerService(CustomerRepository customerRepository)
+        public CustomerService(CustomerRepository customerRepository, CustomerValidator customerValidator)
         {
+            _customerValidator = customerValidator;
             _customerRepository = customerRepository;
         }
 
@@ -23,7 +26,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                Validate(customer);
+                _customerValidator.Validate(customer);
             }
             catch (ArgumentException)
             {
@@ -37,7 +40,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                Validate(customer);
+                _customerValidator.Validate(customer);
             }
             catch (ArgumentException)
             {
@@ -54,29 +57,15 @@ namespace CourseProject.BLL.Services
             _customerRepository.Delete(customer);
         }
 
-        private void Validate(Customer customer)
+        public IEnumerable<Customer> Get()
         {
-            if (customer is null || customer.CustomerName.IsNullOrEmpty() || customer.CustomerSurname.IsNullOrEmpty() ||
-                customer.Phone.IsNullOrEmpty() || customer.Email.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Customer is null or fields of Customer is null");
-            }
-            if (customer.CustomerSurname.Length > 40)
-            {
-                throw new ArgumentException("CustomerSurname was greater then max length value");
-            }
-            if (customer.CustomerName.Length > 40)
-            {
-                throw new ArgumentException("CustomerName was greater then max length value");
-            }
-            if (customer.Phone.Length > 40)
-            {
-                throw new ArgumentException("Phone was greater then max length value");
-            }
-            if (customer.Email.Length > 40)
-            {
-                throw new ArgumentException("Email was greater then max length value");
-            }
+            return _customerRepository.Get();
         }
+
+        public Customer Get(int id)
+        {
+            return _customerRepository.Get(id);
+        }
+
     }
 }

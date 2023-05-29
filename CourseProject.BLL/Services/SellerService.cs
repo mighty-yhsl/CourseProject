@@ -8,15 +8,18 @@ using CourseProject.BLL.Interfaces;
 using CourseProject.DAL.Models.EF;
 using CourseProject.BLL.Repositories;
 using CourseProject.BLL.Repositories;
+using CourseProject.BLL.Validators;
 
 namespace CourseProject.BLL.Services
 {
     public class SellerService
     {
+        private SellerValidator _sellerValidator;
         private SellerRepository _sellerRepository;
 
-        public SellerService(SellerRepository sellerRepository)
+        public SellerService(SellerRepository sellerRepository, SellerValidator sellerValidator)
         {
+            _sellerValidator = sellerValidator;
             _sellerRepository = sellerRepository;
         }
 
@@ -24,7 +27,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                Validate(seller);
+                _sellerValidator.Validate(seller);
             }
             catch (ArgumentException)
             {
@@ -38,7 +41,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                Validate(seller);
+                _sellerValidator.Validate(seller);
             }
             catch (ArgumentException)
             {
@@ -54,30 +57,15 @@ namespace CourseProject.BLL.Services
                 throw new InvalidOperationException($"Seller with id {id} is not found");
             _sellerRepository.Delete(seller);
         }
-
-        private void Validate(Seller seller)
+        
+        public IEnumerable<Seller> Get()
         {
-            if (seller is null || seller.SellerName.IsNullOrEmpty() || seller.SellerSurname.IsNullOrEmpty() ||
-                seller.Phone.IsNullOrEmpty() || seller.Email.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Seller is null or fields of Seller is null");
-            }
-            if (seller.SellerSurname.Length > 40)
-            {
-                throw new ArgumentException("SellerSurname was greater then max length value");
-            }
-            if (seller.SellerName.Length > 40)
-            {
-                throw new ArgumentException("SellerName was greater then max length value");
-            }
-            if (seller.Phone.Length > 40)
-            {
-                throw new ArgumentException("Phone was greater then max length value");
-            }
-            if (seller.Email.Length > 40)
-            {
-                throw new ArgumentException("Email was greater then max length value");
-            }
+            return _sellerRepository.Get();
+        }
+
+        public Seller Get(int id)
+        {
+            return _sellerRepository.Get(id);
         }
     }
 }

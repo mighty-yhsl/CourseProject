@@ -17,6 +17,10 @@ namespace CourseProject.ViewModels
 
         public decimal Price { get; set; }
 
+        public int CategoryId { get; set; }
+
+        public int ManufacturerId { get; set; }
+
         public Transport ConvertToTransport() 
         {
             return new Transport

@@ -7,37 +7,40 @@ using Microsoft.IdentityModel.Tokens;
 using CourseProject.BLL.Interfaces;
 using CourseProject.DAL.Models.EF;
 using CourseProject.BLL.Repositories;
+using CourseProject.BLL.Validators;
 
 namespace CourseProject.BLL.Services
 {
     public class OrderService
     {
-        private IOrderRepository _orderRepository;
+        private OrderValidator _orderValidator;
+        private OrderRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(OrderRepository orderRepository, OrderValidator orderValidator)
         {
+            _orderValidator = orderValidator;
             _orderRepository = orderRepository;
         }
         
-        public void CreateOrder(CustomerOrder order, List<OrderDetail> orderDetails)
+        public void CreateOrder(CustomerOrder order)
         {
             try
             {
-                ValidateOrder(order);
+                _orderValidator.Validate(order);
             }
             catch (ArgumentException)
             {
                 throw new InvalidOperationException($"Order not Created");
             }
 
-            _orderRepository.Create(order,orderDetails);
+            _orderRepository.Create(order);
         }
 
         public void CreateDetails(OrderDetail detail)
         {
             try
             {
-                ValidateDetail(detail);
+                _orderValidator.Validate(detail);
             }
             catch (ArgumentException)
             {
@@ -51,7 +54,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                ValidateOrder(order);
+                _orderValidator.Validate(order);
             }
             catch (ArgumentException)
             {
@@ -64,7 +67,7 @@ namespace CourseProject.BLL.Services
         {
             try
             {
-                ValidateDetail(detail);
+                _orderValidator.Validate(detail);
             }
             catch (ArgumentException)
             {
@@ -75,50 +78,20 @@ namespace CourseProject.BLL.Services
 
         public void DeleteOrder(int id)
         {
-            var order = _orderRepository.GetOrder(id);
+            var order = _orderRepository.Get(id);
             if (order is null)
                 throw new InvalidOperationException($"Order with id {id} is not found");
             _orderRepository.Delete(order);
         }
 
-        public void DeleteDetails(int id)
+        /*public void DeleteDetails(int TransportId, int CustomerOrderId)
         {
-            var detail = _orderRepository.GetDetails(id);
+            var detail = _orderRepository.Get(id);
             if (detail is null)
                 throw new InvalidOperationException($"OrderDetail with id {id} is not found");
             _orderRepository.DeleteDetails(detail);
-        }
+        }*/
 
-        private void ValidateOrder(CustomerOrder order)
-        {
-            if (order is null)
-            {
-                throw new ArgumentException("Order is null");
-            }
-            if ((!order.Description.IsNullOrEmpty() && order.Description.Length > 256))
-            {
-                throw new ArgumentException("Description was greater then max length value or Description is not null");
-            }
-            if (order.CreateDate > DateTime.Now)
-            {
-                throw new ArgumentException("CreateDate cannot be in the future");
-            }
-        }
-
-        private void ValidateDetail(OrderDetail detail)
-        {
-            if (detail is null)
-            {
-                throw new ArgumentException("OrderDetail is null");
-            }
-            if (detail.TotalPrice < 0)
-            {
-                throw new ArgumentException("TotalPrice should be greater or equals 0");
-            }
-            if (detail.TotalAmount < 1)
-            {
-                throw new ArgumentException("TotalAmount should be greater or equals 1");
-            }
-        }
+      
     }
 }
