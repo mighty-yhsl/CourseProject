@@ -19,7 +19,7 @@ namespace CourseProject.BLL.Repositories
         private const string DELETE_QUERY = "DELETE FROM Transport WHERE Id = @Id";
         private const string UPDATE_QUERY = "UPDATE Transport SET [Name] = @Name, Speed = @Speed, Weightt = @Weightt, EnginePower = @EnginePower,Amount = @Amount, Price = @Price, CategoryId = @CategoryId, ManufacturerId = @ManufacturerId WHERE Id = @Id";
         private const string GET_BY_ID_QUERY = "SELECT t.Id, t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price, c.CategoryName AS Category_Name , m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id WHERE t.Id = @Id";
-        private const string GET_QUERY = "SELECT t.Id, t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price,t.CategoryId, t.ManufacturerId, c.Id AS Category_Id, c.CategoryName AS Category_Name, m.Id AS Manufacturer_Id, m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id";
+        private const string GET_QUERY = "SELECT t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price,t.CategoryId, t.ManufacturerId, c.Id AS Category_Id, c.CategoryName AS Category_Name, m.Id AS Manufacturer_Id, m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id";
 
         public TransportRepository(IConfiguration configuration) : base(configuration)
         {
@@ -99,8 +99,7 @@ namespace CourseProject.BLL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Transport transport = new Transport();
-                            transport.Id = Convert.ToInt32(reader["Id"]);
+                            Transport transport = new Transport();;
                             transport.Name = Convert.ToString(reader["Name"]);
                             transport.Speed = Convert.ToInt32(reader["Speed"]);
                             transport.Weightt = Convert.ToInt32(reader["Weightt"]);

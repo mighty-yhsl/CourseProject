@@ -1,4 +1,5 @@
-﻿namespace CourseProject.ViewModels
+﻿
+namespace CourseProject.ViewModels
 {
     public class TransportVM
     {
