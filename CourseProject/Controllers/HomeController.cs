@@ -1,5 +1,4 @@
-﻿using AspNetCore;
-using CourseProject.Models;
+﻿using CourseProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -20,11 +19,6 @@ namespace CourseProject.Controllers
         }
 
         public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult MainView()
         {
             return View();
         }

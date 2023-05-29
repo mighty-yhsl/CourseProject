@@ -14,11 +14,12 @@ namespace CourseProject.BLL.Repositories
 {
     public class OrderRepository : Repository<CustomerOrder>
     {
-        private const string CREATE_QUERY_CUSTOMER_ORDER = "INSERT INTO CustomerOrders(Description, CreateDate, UpdateDate, SellerId, CustomerId, StatusId) OUTPUT INSERTED.Id VALUES (@Description, @CreateDate, @UpdateDate, @SellerId, @CustomerId, @StatusId)";
-        private const string CREATE_QUERY_CUSTOMER_ORDERDETAILS = "INSERT INTO OrderDetails (TotalAmount, TotalPrice, CustomerOrderId, TransportId) VALUES (@TotalAmount, @TotalPrice, @CustomerOrderId, @TransportId)";
-        // private const string CREATE_QUERY_ORDERDETAILS = "";
+        private const string CREATE_QUERY = "INSERT INTO CustomerOrders(Description, CreateDate, UpdateDate, SellerId, CustomerId, StatusId) OUTPUT INSERTED.ID VALUES (@Description, @CreateDate, @UpdateDate, @SellerId, @CustomerId, @StatusId)";
+        private const string CREATE_QUERY_ORDERDETAILS = "INSERT INTO OrderDetails (TotalAmount, TotalPrice, CustomerOrderId, TransportId) VALUES (@TotalAmount, @TotalPrice, @CustomerOrderId, @TransportId)";
         private const string DELETE_QUERY = "DELETE FROM CustomerOrder WHERE Id = @Id";
+        private const string DELETE_QUERY_DETAILS = "DELETE FROM OrderDetails WHERE TransportId = @TransportId AND CustomerOrderId = @CustomerOrderId";
         private const string UPDATE_QUERY = "UPDATE CustomerOrders SET Description = @Description, CreateDate = @CreateDate, UpdateDate = @UpdateDate, SellerId = @SellerId, CustomerId = @CustomerId, StatusId = @StatusId WHERE Id = @Id";
+        private const string UPDATE_QUERY_DETAILS = "UPDATE OrderDetails SET TotalAmount = @TotalAmount, TotalPrice = @TotalPrice, CustomerOrderId = @CustomerOrderId, TransportId = @TransportId";
         private const string GET_BY_ID_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetail_Id, od.TotalAmount, od.TotalPrice, od.CustomerOrderId, od.TransportId, so.Id AS Status_Id, so.Name FROM CustomerOrders co LEFT JOIN OrderDetails od ON co.Id = od.CustomerOrderId LEFT JOIN StatusOrders so ON co.StatusId = so.Id LEFT JOIN Transports t ON od.TransportId = t.Id WHERE co.Id = @Id";
         private const string GET_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetailId, od.TotalAmount, od.TotalPrice, od.TransportId FROM CustomerOrders co INNER JOIN OrderDetails od ON co.Id = od.CustomerOrderId";
 
@@ -32,68 +33,46 @@ namespace CourseProject.BLL.Repositories
 
         public override void Create(CustomerOrder entity)
         {
-
-            using (SqlConnection connection = new SqlConnection(con))
+            var parameters = new SqlParameter[]
             {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(CREATE_QUERY_CUSTOMER_ORDER, connection))
-                {
-                    command.Parameters.AddWithValue("@Description", entity.Description);
-                    command.Parameters.AddWithValue("@CreateDate", entity.CreateDate);
-                    command.Parameters.AddWithValue("@UpdateDate", entity.UpdateDate);
-                    command.Parameters.AddWithValue("@SellerId", entity.SellerId);
-                    command.Parameters.AddWithValue("@CustomerId", entity.CustomerId);
-                    command.Parameters.AddWithValue("@StatusId", entity.StatusId);
-
-                    int orderId = (int)command.ExecuteScalar();
-                    entity.Id = orderId;
-                }
-
-                foreach (var detail in entity.OrderDetails)
-                {
-                    using (SqlCommand command = new SqlCommand(CREATE_QUERY_CUSTOMER_ORDERDETAILS, connection))
-                    {
-                        command.Parameters.AddWithValue("@TotalAmount", detail.TotalAmount);
-                        command.Parameters.AddWithValue("@TotalPrice", detail.TotalPrice);
-                        command.Parameters.AddWithValue("@CustomerOrderId", entity.Id);
-                        command.Parameters.AddWithValue("@TransportId", detail.TransportId);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-                connection.Close();
+                new SqlParameter("@OperatorId", entity.Description),
+                new SqlParameter("@OrderStatusId", entity.CreateDate),
+                new SqlParameter("@OrderDate", entity.UpdateDate),
+                new SqlParameter("@CustomerName", entity.SellerId),
+                new SqlParameter("@CustomerName", entity.CustomerId),
+                new SqlParameter("@CustomerName", entity.StatusId)
+            };
+            var customerOrderId = (int)ExecuteScalarCommand(CREATE_QUERY, parameters);
+            foreach (var detail in entity.OrderDetails)
+            {
+                detail.CustomerOrderId = customerOrderId;
+                CreateDetail(detail);
             }
-
         }
 
-        /*public override void Create(OrderDetail entity)
+        public void CreateDetail(OrderDetail order)
         {
             var parameters = new SqlParameter[]
             {
-                new SqlParameter("@TotalAmount", entity.TotalAmount),
-                new SqlParameter("@TotalPrice", entity.TotalPrice),
-                new SqlParameter("@CustomerOrderId", entity.CustomerOrderId),
-                new SqlParameter("@TransportId", entity.TransportId)
+                new SqlParameter("@TotalAmount", order.TotalAmount),
+                new SqlParameter("@TotalPrice", order.TotalPrice),
+                new SqlParameter("@CustomerOrderId", order.CustomerOrderId),
+                new SqlParameter("@TransportId", order.TransportId)
             };
             ExecuteScalarCommand(CREATE_QUERY_ORDERDETAILS, parameters);
-        }*/
+        }
+
         public override void Delete(CustomerOrder entity)
         {
             var parameters = new SqlParameter[] { new SqlParameter("@Id", entity.Id) };
             ExecuteCommand(DELETE_QUERY, parameters);
         }
 
-        /*public void DeleteDetails(OrderDetail detail)
+        public void DeleteDetails(int TransportId, int CustomerOrderId)
         {
-            _shopContext.Database.ExecuteSqlRaw("DELETE FROM OrderDetails WHERE Id = @0", detail.Id);
+            var parameters = new SqlParameter[] { new SqlParameter("@TransportId", TransportId), new SqlParameter("@CustomerOrderId", CustomerOrderId) };
+            ExecuteCommand(DELETE_QUERY_DETAILS, parameters);
         }
-
-        public OrderDetail GetDetails(int id)
-        {
-            return _shopContext.OrderDetails.FromSqlRaw("SELECT * FROM OrderDetail WHERE Id = @0", +
-               id).FirstOrDefault();
-        }*/
 
         public override CustomerOrder Get(int id)
         {
@@ -194,22 +173,20 @@ namespace CourseProject.BLL.Repositories
             new SqlParameter("@SellerId", entity.SellerId),
             new SqlParameter("@CustomerId", entity.CustomerId),
             new SqlParameter("@StatusId", entity.StatusId),
-            new SqlParameter("@Id", entity.Id),
             };
             ExecuteCommand(UPDATE_QUERY, parameters);
 
         }
 
-        /* public void UpdateDetails(OrderDetail detail)
+         public void UpdateDetails(OrderDetail detail)
          {
-             _shopContext.Database.ExecuteSqlRaw("UPDATE OrderDetail SET TotalAmount = @0, TotalPrice = @1, " +
-                 "CustomerOrderId = @2, TransportId = @3 WHERE Id = @4",
-                 new SqlParameter("@0", detail.TotalAmount),
-                 new SqlParameter("@1", detail.TotalPrice),
-                 new SqlParameter("@2", detail.CustomerOrderId),
-                 new SqlParameter("@3", detail.TransportId),
-                 new SqlParameter("@4", detail.Id));
-             //_shopContext.SaveChanges();
-         }*/
+            var parameters = new SqlParameter[] {
+            new SqlParameter("@Description", detail.TotalAmount),
+            new SqlParameter("@CreateDate", detail.TotalPrice),
+            new SqlParameter("@UpdateDate", detail.CustomerOrderId),
+            new SqlParameter("@SellerId", detail.TransportId),
+            };
+            ExecuteCommand(UPDATE_QUERY_DETAILS, parameters);
+         }
     }
 }

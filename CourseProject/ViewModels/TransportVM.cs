@@ -1,4 +1,6 @@
 ﻿
+using CourseProject.DAL.Models.EF;
+
 namespace CourseProject.ViewModels
 {
     public class TransportVM
@@ -14,5 +16,18 @@ namespace CourseProject.ViewModels
         public int Amount { get; set; }
 
         public decimal Price { get; set; }
+
+        public Transport ConvertToTransport() 
+        {
+            return new Transport
+            {
+                Name = Name,
+                Speed = Speed,
+                Weightt = Weightt,
+                EnginePower = EnginePower,
+                Amount = Amount,
+                Price = Price
+            };
+        }
     }
 }
