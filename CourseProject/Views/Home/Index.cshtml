@@ -6,8 +6,8 @@
 <div class="text-center">
     <h1 class="display-4"><strong>Welcome Girosmart!</strong></h1>
     <font size="5">
-        <a class="btn-primary" style="" href="@Url.Action("ClientPartsCatalog","Home")">Клієнт</a>
-        <a class="btn-secondary" href="@Url.Action("GetAllTransports","Transport")">Продавець</a>
+        <a type="button" class="btn btn-lg btn-light" style="" href=" @Url.ActionLink("ClientPartsCatalog", "Home", new { @class = "btn btn-light" })">Клієнт</a>
+        <a type="button" class="btn btn-lg btn-primary" style="" href=" @Url.ActionLink("GetAllTransports", "Transport", new { @class = "btn btn-primary" })">Продавець</a>
     </font>
 </div>
 

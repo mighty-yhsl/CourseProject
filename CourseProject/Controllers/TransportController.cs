@@ -30,7 +30,7 @@ namespace CourseProject.Controllers
             }
             catch (ArgumentException ex) 
             {
-                ViewData["Exeption"] = ex.Message;
+                ViewData["Exception"] = ex.Message;
                 return View("Create");
             }
         }

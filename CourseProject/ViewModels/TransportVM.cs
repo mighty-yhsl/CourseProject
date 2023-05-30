@@ -42,6 +42,8 @@ namespace CourseProject.ViewModels
                 EnginePower = EnginePower,
                 Amount = Amount,
                 Price = Price,
+                ManufacturerId = ManufacturerId,
+                CategoryId = CategoryId 
             };
         }
     }
