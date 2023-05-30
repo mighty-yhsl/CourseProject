@@ -4,12 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Новий товар</h1>
 <h1 style="color:yellow;font-size:16px;">@(ViewData["Exception"] ?? (""))</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="TryCreate">
+        <form method="post"asp-action="TryCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -59,7 +59,7 @@
 </div>
 
 <div>
-    <a asp-action="GetAllTransports">Back to List</a>
+    <a asp-action="GetAllTransports">Повернутися до товарів</a>
 </div>
 
 @section Scripts {

@@ -46,7 +46,7 @@ namespace CourseProject.BLL.Repositories
                 new SqlParameter("@CategoryId", entity.Category.Id),
                 new SqlParameter("@ManufacturerId", entity.Manufacturer.Id)
             };
-            ExecuteScalarCommand(CREATE_QUERY, parameters);
+            ExecuteCommand(CREATE_QUERY, parameters);
         }
         
   

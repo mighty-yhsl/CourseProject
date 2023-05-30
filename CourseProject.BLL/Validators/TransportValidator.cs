@@ -20,17 +20,49 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("Price should be greater or equals 0");
             }
+            if (transport.Price > 50000)
+            {
+                throw new ArgumentException("Price should be less 50000");
+            }
             if (transport.Amount < 1)
             {
                 throw new ArgumentException("Amount should be greater or equals 1");
             }
-            if (transport.Speed < 1 && transport.Weightt < 1 && transport.EnginePower < 1)
+            if (transport.Amount > 50)
             {
-                throw new ArgumentException("One of string fields was greater or equals 1");
+                throw new ArgumentException("Amount should be less 50");
+            }
+            if (transport.Speed < 1)
+            {
+                throw new ArgumentException("Speed should be greater or equals 1");
+            }
+            if (transport.Speed > 70)
+            {
+                throw new ArgumentException("Speed should be less 70");
+            }
+            if (transport.Weightt < 1)
+            {
+                throw new ArgumentException("Speed should be greater or equals 1");
+            }
+            if (transport.Weightt > 50)
+            {
+                throw new ArgumentException("Speed should be less 50");
+            }
+            if (transport.EnginePower < 1)
+            {
+                throw new ArgumentException("EnginePower should be greater or equals 1");
+            }
+            if (transport.EnginePower > 1000)
+            {
+                throw new ArgumentException("EnginePower should be less 1000");
             }
             if (transport.Name.Length > 64)
             {
-                throw new ArgumentException("Name was greater then max length value");
+                throw new ArgumentException("Name should be less 64");
+            }
+            if (transport.Name.Length < 1)
+            {
+                throw new ArgumentException("Name should be greater or equals 1");
             }
         }
 
