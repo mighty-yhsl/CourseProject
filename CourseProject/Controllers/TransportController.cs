@@ -1,5 +1,6 @@
 ﻿using CourseProject.BLL.Repositories;
 using CourseProject.BLL.Services;
+using CourseProject.DAL.Models.EF;
 using CourseProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,24 @@ namespace CourseProject.Controllers
         { 
         }
 
-        public ActionResult GetAllTransports([FromServices] TransportRepository transportRepository) 
+        public ActionResult GetAllTransports([FromServices] TransportRepository transportRepository)
         {
             return View(transportRepository.Get());
+        }
+
+        public ActionResult GetTransportName([FromServices] TransportRepository transportRepository, Transport entity) 
+        {
+            var transport = new Transport { Name = entity.Name };
+            var result = transportRepository.GetTransportName(transport);
+
+            if (result == null)
+            {
+                // Обработка случая, когда объект Transport не найден
+                return NotFound();
+            }
+
+            var transportList = new List<Transport> { result };
+            return View("GetTransportName", transportList);
         }
 
         public ActionResult Create() 
@@ -35,6 +51,7 @@ namespace CourseProject.Controllers
             }
         }
 
+
         public ActionResult Delete([FromServices] TransportService transportService, int id)
         {
             try
@@ -52,11 +69,25 @@ namespace CourseProject.Controllers
             [FromServices] TransportService transportService, int id)
         {
             var transport = transportReposiory.Get(id);
-            if (transportReposiory is null)
+            if (transport is null)
             { 
                  return Redirect("/transport/GetAllTransports");
             }
-            return View();
+            return View(transport);
+        }
+
+        public ActionResult TryUpdate([FromServices] TransportService transportService, Transport model)
+        {
+            try
+            {
+                transportService.UpdateTransport(model);
+                return Redirect("/transport/GetAllTransports");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewData["Exception"] = ex.Message;
+                return View("Update");
+            }
         }
     }
 }

@@ -58,6 +58,14 @@ namespace CourseProject.BLL.Services
             _transportRepository.Delete(transport);
         }
 
+        public void GetTransportName(Transport entity)
+        {
+            var transport = _transportRepository.GetTransportName(entity);
+            if (transport is null)
+                throw new InvalidOperationException($"Transport with entity {entity} is not found");
+            _transportRepository.Delete(transport);
+        }
+
         public IEnumerable<Transport> Get()
         {
             return _transportRepository.Get();

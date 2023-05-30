@@ -15,6 +15,10 @@
 <p>
     <a type="button" asp-action="Create" asp-controller="Transport" class="btn btn-sm btn-dark">Додати товар</a>
 </p>
+<form method="get" action="@Url.Action("GetTransportName", "Transport")">
+    <input type="text" name="TransportName" placeholder="Пошук за назвою товару" style="width:500px" />
+    <button type="submit" class="search-btn">Знайти</button>
+</form>
 <table class="table">
     <thead>
         <tr>
