@@ -11,7 +11,7 @@ namespace CourseProject.ViewModels
         [MaxLength(64, ErrorMessage = "Name length must not exceed 50 characters.")]
         public string Name { get; set; } = null!;
 
-        [Range(1, 70)]
+        [Range(1, 100)]
         public int Speed { get; set; }
 
         [Range(1, 50)]
@@ -23,7 +23,7 @@ namespace CourseProject.ViewModels
         [Range(1, 50)]
         public int Amount { get; set; }
 
-        [Range(1, 100000)]
+        [Range(1, 1000000)]
         public decimal Price { get; set; }
 
         [Range(1, 5)]

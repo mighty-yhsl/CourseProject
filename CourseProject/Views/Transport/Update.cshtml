@@ -13,53 +13,53 @@
         <form asp-action="TryUpdate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
+                <label asp-for="Id" class="control-label">Ідентифікатор</label>
+                <input asp-for="Id" class="form-control" min="1" max="100000" required />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label">Назва</label>
+                <input asp-for="Name" class="form-control" minlenth="1" maxlenth="64" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Speed" class="control-label"></label>
-                <input asp-for="Speed" class="form-control" />
+                <label asp-for="Speed" class="control-label">Швидкість</label>
+                <input asp-for="Speed" class="form-control" min="1" max="100" required />
                 <span asp-validation-for="Speed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Weightt" class="control-label"></label>
-                <input asp-for="Weightt" class="form-control" />
+                <label asp-for="Weightt" class="control-label">Вага</label>
+                <input asp-for="Weightt" class="form-control" min="1" max="50" required />
                 <span asp-validation-for="Weightt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EnginePower" class="control-label"></label>
-                <input asp-for="EnginePower" class="form-control" />
+                <label asp-for="EnginePower" class="control-label">Потужність</label>
+                <input asp-for="EnginePower" class="form-control" min="1" max="1000" required />
                 <span asp-validation-for="EnginePower" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
+                <label asp-for="Amount" class="control-label">Кількість</label>
+                <input asp-for="Amount" class="form-control" min="1" max="50" required />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <label asp-for="Price" class="control-label">Ціна</label>
+                <input asp-for="Price" class="form-control" min="1" max="1000000" required />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
+                <label asp-for="CategoryId" class="control-label">Ідентифікатор Категорії</label>
                 <input asp-for="CategoryId" class="form-control" min="1" max="5" required />
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManufacturerId" class="control-label"></label>
+                <label asp-for="ManufacturerId" class="control-label">Ідентифікатор Виробника</label>
                 <input asp-for="ManufacturerId" class="form-control" min="1" max="5" required />
                 <span asp-validation-for="ManufacturerId" class="text-danger"></span>
             </div>
             <div class="form-group mt-4">
                 <input type="submit" value="Зберегти" class="btn btn-lg btn-primary" />
-                <a type="button" asp-action="GetSellerName" asp-controller="Seller" class="btn btn-lg btn-dark">Повернутися до товарів</a>
+                <a type="button" asp-action="GetSellerName" asp-controller="Seller" class="btn btn-lg btn-dark">Повернутися назад</a>
             </div>
         </form>
     </div>
