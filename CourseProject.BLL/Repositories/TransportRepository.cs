@@ -22,7 +22,8 @@ namespace CourseProject.BLL.Repositories
         private const string UPDATE_QUERY = "UPDATE Transport SET [Name] = @Name, Speed = @Speed, Weightt = @Weightt, EnginePower = @EnginePower,Amount = @Amount, Price = @Price, CategoryId = @CategoryId, ManufacturerId = @ManufacturerId WHERE Id = @Id";
         private const string GET_BY_ID_QUERY = "SELECT t.Id, t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price, c.CategoryName AS Category_Name , t.CategoryId,t.ManufacturerId, m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id WHERE t.Id = @Id";
         private const string GET_QUERY = "SELECT t.Id, t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price,t.CategoryId, t.ManufacturerId, c.CategoryName AS Category_Name, m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id";
-        private const string GET_TRANSPORT_NAME_QUERY = "SELECT Id, Name FROM Transport WHERE Name LIKE '%' + @Name + '%'";
+        private const string GET_TRANSPORT_NAME_QUERY = "SELECT Name FROM Transport WHERE Name LIKE '%' + @Name + '%'";
+        private const string GET_BY_NAME_QUERY = "SELECT t.Id, t.Name, t.Speed, t.Weightt, t.EnginePower, t.Amount, t.Price,t.CategoryId, t.ManufacturerId, c.CategoryName AS Category_Name, m.ManufacturerName AS Manufacturer_Name FROM Transport t INNER JOIN Category c ON t.CategoryId = c.Id INNER JOIN Manufacturer m ON t.ManufacturerId = m.Id WHERE t.Name LIKE '%' + @Name + '%'";
 
         public TransportRepository(IConfiguration configuration) : base(configuration)
         {
@@ -60,32 +61,38 @@ namespace CourseProject.BLL.Repositories
             ExecuteCommand(DELETE_QUERY, parameters);
         }
 
-        public Transport GetTransportName(Transport entity)
+        public Transport GetTransportName(string name)
         {
+            Transport transport = new Transport();
             using (var connection = new SqlConnection(con))
             {
+                SqlParameter parameter = new SqlParameter("@Name", name);
                 connection.Open();
-                var parameters = new SqlParameter("@Name", SqlDbType.NVarChar) { Value = entity.Name };
-                using (var command = new SqlCommand(GET_TRANSPORT_NAME_QUERY, connection))
+                using (var command = new SqlCommand(GET_BY_NAME_QUERY, connection))
                 {
-                    command.Parameters.Add(parameters);
+                    command.Parameters.Add(parameter);
+
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            var transport = new Transport
-                            {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Name = Convert.ToString(reader["Name"]),
-                                // Заполните остальные свойства по мере необходимости
-                            };
-                            return transport;
+                            transport.Id = Convert.ToInt32(reader["Id"]);
+                            transport.Name = Convert.ToString(reader["Name"]);
+                            transport.Speed = Convert.ToInt32(reader["Speed"]);
+                            transport.Weightt = Convert.ToInt32(reader["Weightt"]);
+                            transport.EnginePower = Convert.ToInt32(reader["EnginePower"]);
+                            transport.Amount = Convert.ToInt32(reader["Amount"]);
+                            transport.Price = Convert.ToDecimal(reader["Price"]);
+                            transport.CategoryId = Convert.ToInt32(reader["CategoryId"]);
+                            transport.Category = new Category { Id = (int)reader["CategoryId"], CategoryName = (string)reader["Category_Name"] };
+                            transport.ManufacturerId = Convert.ToInt32(reader["ManufacturerId"]);
+                            transport.Manufacturer = new Manufacturer { Id = (int)reader["ManufacturerId"], ManufacturerName = (string)reader["Manufacturer_Name"] };
                         }
                     }
                 }
                 connection.Close();
             }
-            return null;
+            return transport;
         }
 
         public override Transport Get(int id)

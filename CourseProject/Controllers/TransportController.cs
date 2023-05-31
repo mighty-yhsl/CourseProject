@@ -17,19 +17,35 @@ namespace CourseProject.Controllers
             return View(transportRepository.Get());
         }
 
-        public ActionResult GetTransportName([FromServices] TransportRepository transportRepository, Transport entity) 
+        public ActionResult GetTransportName([FromServices] TransportService transportService, TransportVM model)
         {
-            var transport = new Transport { Name = entity.Name };
-            var result = transportRepository.GetTransportName(transport);
-
-            if (result == null)
+            try
             {
-                // Обработка случая, когда объект Transport не найден
-                return NotFound();
-            }
+                if (!string.IsNullOrEmpty(model.Name))
+                {
+                    Transport transport = transportService.GetTransportName(model.Name);
+                    if (transport != null)
+                    {
+                        var transportList = new List<Transport> { transport }; // Обернуть найденный транспорт в коллекцию
+                        return View(transportList); // Передать коллекцию во вьюшку
+                    }
+                    else
+                    {
+                        Console.WriteLine("Transport not found !");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Name is null or empty!");
+                }
 
-            var transportList = new List<Transport> { result };
-            return View("GetTransportName", transportList);
+                return Redirect("/transport/GetAllTransports");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewData["Exception"] = ex.Message;
+                return View("/transport/GetAllTransports");
+            }
         }
 
         public ActionResult Create() 
