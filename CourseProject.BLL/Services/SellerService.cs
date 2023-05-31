@@ -54,7 +54,7 @@ namespace CourseProject.BLL.Services
         {
             var seller = _sellerRepository.Get(id);
             if (seller is null)
-                throw new InvalidOperationException($"Seller with id {id} is not found");
+                throw new InvalidOperationException($"Продавець з таким {id} не знайдений");
             _sellerRepository.Delete(seller);
         }
         

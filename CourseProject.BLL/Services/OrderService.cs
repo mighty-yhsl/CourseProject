@@ -80,7 +80,7 @@ namespace CourseProject.BLL.Services
         {
             var order = _orderRepository.Get(id);
             if (order is null)
-                throw new InvalidOperationException($"Order with id {id} is not found");
+                throw new InvalidOperationException($"Замовлення з таким {id} не знайдено");
             _orderRepository.Delete(order);
         }
 

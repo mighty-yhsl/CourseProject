@@ -53,7 +53,7 @@ namespace CourseProject.BLL.Services
         {
             var customer = _customerRepository.Get(id);
             if (customer is null)
-                throw new InvalidOperationException($"Customer with id {id} is not found");
+                throw new InvalidOperationException($"Клієнт з таким {id} не знайдений");
             _customerRepository.Delete(customer);
         }
 

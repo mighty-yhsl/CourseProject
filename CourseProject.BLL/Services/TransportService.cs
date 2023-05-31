@@ -54,7 +54,7 @@ namespace CourseProject.BLL.Services
         {
             var transport = _transportRepository.Get(id);
             if (transport is null)
-                throw new InvalidOperationException($"Transport with id {id} is not found");
+                throw new InvalidOperationException($"Товар з таким {id} не знайдено");
             _transportRepository.Delete(transport);
         }
 
@@ -62,7 +62,7 @@ namespace CourseProject.BLL.Services
         {
             var transport = _transportRepository.GetTransportName(name);
             if (transport is null)
-                throw new InvalidOperationException($"Transport with name '{name}' is not found");
+                throw new InvalidOperationException($"Товар з таким '{name}' не знайдено");
             return transport;
         }
 

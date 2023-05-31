@@ -26,8 +26,8 @@ namespace CourseProject.Controllers
                     Transport transport = transportService.GetTransportName(model.Name);
                     if (transport != null)
                     {
-                        var transportList = new List<Transport> { transport }; // Обернуть найденный транспорт в коллекцию
-                        return View(transportList); // Передать коллекцию во вьюшку
+                        var transportList = new List<Transport> { transport }; 
+                        return View(transportList); 
                     }
                     else
                     {
