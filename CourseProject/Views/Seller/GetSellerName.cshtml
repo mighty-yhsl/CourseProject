@@ -1,0 +1,55 @@
+﻿@model IEnumerable<CourseProject.ViewModels.SellerVM>
+
+@{
+    ViewData["Title"] = "GetSellerName";
+}
+
+<<h1 class="center">Працівники</h1>
+<p>
+    <a type="button" asp-action="Create" asp-controller="Seller" class="btn btn-sm btn-dark">Додати працівника</a>
+</p>
+<form asp-action="GetSellerName" asp-controller="Seller">
+    <input type="text" name="SellerName" placeholder="Пошук за Ім'ям" style="width:500px" />
+    <button type="submit" class="search-btn">Знайти</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.Label("Ім'я")
+            </th>
+            <th>
+                @Html.Label("Прізвище")
+            </th>
+            <th>
+                @Html.Label("Телефон")
+            </th>
+            <th>
+                @Html.Label("Пошта")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerSurname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+                <td>
+                    <a type="button" asp-action="Delete" asp-controller="Seller" asp-route-id="@(item.Id)" class="btn btn-sm btn-danger">Видалити</a>
+                    <a type="button" asp-action="Update" asp-controller="Seller" asp-route-id="@(item.Id)" class="btn btn-sm btn-primary">Редагувати</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

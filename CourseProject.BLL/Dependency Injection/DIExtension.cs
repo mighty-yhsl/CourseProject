@@ -22,6 +22,8 @@ namespace CourseProject.BLL.Dependency_Injection
             services.AddTransient<SellerRepository>();
             services.AddTransient<TransportService>();
             services.AddTransient<TransportValidator>();
+            services.AddTransient<SellerService>();
+            services.AddTransient<SellerValidator>();
         }
     }
 }

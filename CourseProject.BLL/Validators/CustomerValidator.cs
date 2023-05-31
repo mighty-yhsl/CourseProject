@@ -34,6 +34,10 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("Email was greater then max length value");
             }
+            if (customer.Id > 0)
+            {
+                throw new ArgumentException("Id should be greater 0");
+            }
         }
     }
 }

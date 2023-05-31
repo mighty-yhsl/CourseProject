@@ -7,7 +7,7 @@ namespace CourseProject.ViewModels
     public class TransportVM
     {
 
-        [MinLength(1, ErrorMessage = "Name length must be at least 2 characters.")]
+        [MinLength(1, ErrorMessage = "Name length must be at least 1 characters.")]
         [MaxLength(64, ErrorMessage = "Name length must not exceed 50 characters.")]
         public string Name { get; set; } = null!;
 

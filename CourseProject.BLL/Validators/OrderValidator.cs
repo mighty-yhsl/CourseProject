@@ -25,6 +25,10 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("CreateDate cannot be in the future");
             }
+            if (order.Id > 0)
+            {
+                throw new ArgumentException("Id should be greater  0");
+            }
         }
 
         public void Validate(OrderDetail detail)

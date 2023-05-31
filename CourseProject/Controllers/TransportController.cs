@@ -81,10 +81,10 @@ namespace CourseProject.Controllers
             }
         }
 
-        public ActionResult Update([FromServices] TransportRepository transportReposiory,
+        public ActionResult Update([FromServices] TransportRepository transportRepository,
             [FromServices] TransportService transportService, int id)
         {
-            var transport = transportReposiory.Get(id);
+            var transport = transportRepository.Get(id);
             if (transport is null)
             { 
                  return Redirect("/transport/GetAllTransports");

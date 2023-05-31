@@ -18,7 +18,7 @@ namespace CourseProject.BLL.Repositories
         private const string UPDATE_QUERY = "UPDATE Seller SET SellerName = @SellerName, SellerSurname = @SellerSurname, Phone = @Phone, Email = @Email WHERE Id = @Id";
         private const string GET_BY_ID_QUERY = "SELECT s.Id, s.SellerName, s.SellerSurname, s.Phone, s.Email FROM Seller s WHERE s.Id = @Id";
         private const string GET_QUERY = "SELECT s.Id, s.SellerName, s.SellerSurname, s.Phone, s.Email FROM Seller s";
-
+        private const string GET_BY_NAME_QUERY = "SELECT s.Id, s.SellerName, s.SellerSurname, s.Phone, s.Email FROM Seller s WHERE s.SellerName LIKE '%' + @SellerName + '%'";
 
         public SellerRepository(IConfiguration configuration) : base(configuration)
         {
@@ -37,6 +37,34 @@ namespace CourseProject.BLL.Repositories
                 new SqlParameter("@Email", entity.Email)
             };
             ExecuteScalarCommand(CREATE_QUERY, parameters);
+        }
+
+        public Seller GetSellerName(string name)
+        {
+            Seller seller = new Seller();
+            using (var connection = new SqlConnection(con))
+            {
+                SqlParameter parameter = new SqlParameter("@SellerName", name);
+                connection.Open();
+                using (var command = new SqlCommand(GET_BY_NAME_QUERY, connection))
+                {
+                    command.Parameters.Add(parameter);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            seller.Id = Convert.ToInt32(reader["Id"]);
+                            seller.SellerName = Convert.ToString(reader["SellerName"]);
+                            seller.SellerSurname = Convert.ToString(reader["SellerSurname"]);
+                            seller.Phone = Convert.ToString(reader["Phone"]);
+                            seller.Email = Convert.ToString(reader["Email"]);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return seller;
         }
 
         public override void Delete(Seller entity)
@@ -104,6 +132,7 @@ namespace CourseProject.BLL.Repositories
         public override void Update(Seller entity)
         {
             var parameters = new SqlParameter[] {
+            new SqlParameter("@Id", entity.Id),
             new SqlParameter("@SellerName", entity.SellerName),
             new SqlParameter("@SellerSurname", entity.SellerSurname),
             new SqlParameter("@Phone", entity.Phone),

@@ -57,7 +57,15 @@ namespace CourseProject.BLL.Services
                 throw new InvalidOperationException($"Продавець з таким {id} не знайдений");
             _sellerRepository.Delete(seller);
         }
-        
+
+        public Seller GetSellerName(string name)
+        {
+            var seller = _sellerRepository.GetSellerName(name);
+            if (seller is null)
+                throw new InvalidOperationException($"Продавець з таким '{name}' не знайдений");
+            return seller;
+        }
+
         public IEnumerable<Seller> Get()
         {
             return _sellerRepository.Get();

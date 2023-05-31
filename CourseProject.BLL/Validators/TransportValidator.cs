@@ -64,6 +64,10 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("Name should be greater or equals 1");
             }
+            if (transport.Id > 0)
+            {
+                throw new ArgumentException("Id should be greater  0");
+            }
         }
 
         public void Validate(Manufacturer manufacturer) 
@@ -76,6 +80,10 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("ManufacturerName was greater then max length value");
             }
+            if (manufacturer.ManufacturerName.Length < 1)
+            {
+                throw new ArgumentException("ManufacturerName should be greater or equals 1");
+            }
         }
 
         public void Validate(Category category)
@@ -87,6 +95,10 @@ namespace CourseProject.BLL.Validators
             if(category.CategoryName.Length > 40)
             {
                 throw new ArgumentException("CategoryName was greater then max length value");
+            }
+            if (category.CategoryName.Length < 1)
+            {
+                throw new ArgumentException("CategoryName should be greater or equals 1");
             }
         }
     }
