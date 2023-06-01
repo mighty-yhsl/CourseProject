@@ -13,47 +13,32 @@ namespace CourseProject.BLL.Validators
     {
         public void Validate(Seller seller)
         {
-            if (seller is null || seller.SellerName.IsNullOrEmpty() || seller.SellerSurname.IsNullOrEmpty() ||
-                seller.Phone.IsNullOrEmpty() || seller.Email.IsNullOrEmpty())
+            if (seller == null || string.IsNullOrEmpty(seller.SellerName) || string.IsNullOrEmpty(seller.SellerSurname) ||
+                string.IsNullOrEmpty(seller.Phone) || string.IsNullOrEmpty(seller.Email))
             {
-                throw new ArgumentException("Seller is null or fields of Seller is null");
+                throw new ArgumentException("Seller is null or fields of Seller are null or empty");
             }
-            if (seller.SellerSurname.Length > 40)
+
+            if (seller.SellerSurname.Length < 1 || seller.SellerSurname.Length > 40)
             {
-                throw new ArgumentException("SellerSurname was greater then max length value");
+                throw new ArgumentException("SellerSurname length should be between 1 and 40 characters");
             }
-            if (seller.SellerSurname.Length < 1)
+
+            if (seller.SellerName.Length < 1 || seller.SellerName.Length > 40)
             {
-                throw new ArgumentException("SellerSurname should be greater or equals 1");
+                throw new ArgumentException("SellerName length should be between 1 and 40 characters");
             }
-            if (seller.SellerName.Length > 40)
+
+            if (seller.Phone.Length < 1 || seller.Phone.Length > 13)
             {
-                throw new ArgumentException("SellerName was greater then max length value");
+                throw new ArgumentException("Phone length should be between 1 and 13 characters");
             }
-            if (seller.SellerName.Length < 1)
+
+            if (seller.Email.Length < 1 || seller.Email.Length > 40)
             {
-                throw new ArgumentException("SellerName should be greater or equals 1");
+                throw new ArgumentException("Email length should be between 1 and 40 characters");
             }
-            if (seller.Phone.Length > 40)
-            {
-                throw new ArgumentException("Phone was greater then max length value");
-            }
-            if (seller.Phone.Length < 1)
-            {
-                throw new ArgumentException("Phone should be greater or equals 1");
-            }
-            if (seller.Email.Length > 40)
-            {
-                throw new ArgumentException("Email was greater then max length value");
-            }
-            if (seller.Email.Length < 1)
-            {
-                throw new ArgumentException("Email should be greater or equals 1");
-            }
-            if (seller.Id > 0)
-            {
-                throw new ArgumentException("Id should be greater  0");
-            }
+
         }
     }
 }

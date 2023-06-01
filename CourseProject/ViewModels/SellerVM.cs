@@ -17,7 +17,7 @@ namespace CourseProject.ViewModels
         public string SellerSurname { get; set; } = null!;
 
         [MinLength(1, ErrorMessage = "Name length must be at least 1 characters.")]
-        [MaxLength(40, ErrorMessage = "Name length must not exceed 40 characters.")]
+        [MaxLength(13, ErrorMessage = "Name length must not exceed 13 characters.")]
         public string Phone { get; set; } = null!;
 
         [MinLength(1, ErrorMessage = "Name length must be at least 1 characters.")]

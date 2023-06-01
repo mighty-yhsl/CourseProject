@@ -23,7 +23,7 @@ namespace CourseProject.ViewModels
         [Range(1, 50)]
         public int Amount { get; set; }
 
-        [Range(1, 1000000)]
+        [Range(1, 100000)]
         public decimal Price { get; set; }
 
         [Range(1, 5)]

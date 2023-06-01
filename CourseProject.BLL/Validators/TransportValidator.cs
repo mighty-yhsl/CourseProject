@@ -12,93 +12,67 @@ namespace CourseProject.BLL.Validators
     {
         public void Validate(Transport transport)
         {
-            if (transport is null || transport.Name.IsNullOrEmpty())
+            if (transport == null || transport.Name.IsNullOrEmpty())
             {
-                throw new ArgumentException("Transport is null or fields of Transport is null");
+                throw new ArgumentException("Transport is null or fields of Transport are null");
             }
-            if (transport.Price < 0)
+
+            if (transport.Price < 0 || transport.Price > 100000)
             {
-                throw new ArgumentException("Price should be greater or equals 0");
+                throw new ArgumentException("Price should be between 0 and 50000");
             }
-            if (transport.Price > 50000)
+
+            if (transport.Amount < 1 || transport.Amount > 50)
             {
-                throw new ArgumentException("Price should be less 50000");
+                throw new ArgumentException("Amount should be between 1 and 50");
             }
-            if (transport.Amount < 1)
+
+            if (transport.Speed < 1 || transport.Speed > 100)
             {
-                throw new ArgumentException("Amount should be greater or equals 1");
+                throw new ArgumentException("Speed should be between 1 and 100");
             }
-            if (transport.Amount > 50)
+
+            if (transport.Weightt < 1 || transport.Weightt > 50)
             {
-                throw new ArgumentException("Amount should be less 50");
+                throw new ArgumentException("Weight should be between 1 and 50");
             }
-            if (transport.Speed < 1)
+
+            if (transport.EnginePower < 1 || transport.EnginePower > 1000)
             {
-                throw new ArgumentException("Speed should be greater or equals 1");
+                throw new ArgumentException("EnginePower should be between 1 and 1000");
             }
-            if (transport.Speed > 70)
+
+            if (transport.Name.Length < 1 || transport.Name.Length > 64)
             {
-                throw new ArgumentException("Speed should be less 70");
+                throw new ArgumentException("Name length should be between 1 and 64");
             }
-            if (transport.Weightt < 1)
-            {
-                throw new ArgumentException("Speed should be greater or equals 1");
-            }
-            if (transport.Weightt > 50)
-            {
-                throw new ArgumentException("Speed should be less 50");
-            }
-            if (transport.EnginePower < 1)
-            {
-                throw new ArgumentException("EnginePower should be greater or equals 1");
-            }
-            if (transport.EnginePower > 1000)
-            {
-                throw new ArgumentException("EnginePower should be less 1000");
-            }
-            if (transport.Name.Length > 64)
-            {
-                throw new ArgumentException("Name should be less 64");
-            }
-            if (transport.Name.Length < 1)
-            {
-                throw new ArgumentException("Name should be greater or equals 1");
-            }
-            if (transport.Id > 0)
-            {
-                throw new ArgumentException("Id should be greater  0");
-            }
+
+   
         }
 
-        public void Validate(Manufacturer manufacturer) 
+        public void Validate(Manufacturer manufacturer)
         {
-            if (manufacturer is null || manufacturer.ManufacturerName.IsNullOrEmpty())
+            if (manufacturer == null || manufacturer.ManufacturerName.IsNullOrEmpty())
             {
-                throw new ArgumentException("Manufacturer is null ");
+                throw new ArgumentException("Manufacturer is null or ManufacturerName is null or empty");
             }
-            if (manufacturer.ManufacturerName.Length > 40)
+
+            if (manufacturer.ManufacturerName.Length < 1 || manufacturer.ManufacturerName.Length > 40)
             {
-                throw new ArgumentException("ManufacturerName was greater then max length value");
-            }
-            if (manufacturer.ManufacturerName.Length < 1)
-            {
-                throw new ArgumentException("ManufacturerName should be greater or equals 1");
+                throw new ArgumentException("ManufacturerName length should be between 1 and 40");
             }
         }
 
         public void Validate(Category category)
         {
-            if (category is null || category.CategoryName.IsNullOrEmpty())
+            if (category == null || category.CategoryName.IsNullOrEmpty())
             {
-                throw new ArgumentException("Category is null ");
+                throw new ArgumentException("Category is null or CategoryName is null or empty");
             }
-            if(category.CategoryName.Length > 40)
+
+            if (category.CategoryName.Length < 1 || category.CategoryName.Length > 40)
             {
-                throw new ArgumentException("CategoryName was greater then max length value");
-            }
-            if (category.CategoryName.Length < 1)
-            {
-                throw new ArgumentException("CategoryName should be greater or equals 1");
+                throw new ArgumentException("CategoryName length should be between 1 and 40");
             }
         }
     }
