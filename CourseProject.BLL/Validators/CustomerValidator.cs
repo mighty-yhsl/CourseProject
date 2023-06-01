@@ -22,17 +22,33 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("CustomerSurname was greater then max length value");
             }
+            if (customer.CustomerSurname.Length < 1)
+            {
+                throw new ArgumentException("CustomerSurname should be greater or equals 1");
+            }
             if (customer.CustomerName.Length > 40)
             {
                 throw new ArgumentException("CustomerName was greater then max length value");
+            }
+            if (customer.CustomerName.Length < 1)
+            {
+                throw new ArgumentException("CustomerName should be greater or equals 1");
             }
             if (customer.Phone.Length > 40)
             {
                 throw new ArgumentException("Phone was greater then max length value");
             }
+            if (customer.Phone.Length < 1)
+            {
+                throw new ArgumentException("Phone should be greater or equals 1");
+            }
             if (customer.Email.Length > 40)
             {
                 throw new ArgumentException("Email was greater then max length value");
+            }
+            if (customer.Email.Length < 1)
+            {
+                throw new ArgumentException("Email should be greater or equals 1");
             }
             if (customer.Id > 0)
             {

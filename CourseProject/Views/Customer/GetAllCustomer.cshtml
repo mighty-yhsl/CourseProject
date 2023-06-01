@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CourseProject.DAL.Models.EF.Seller>
+﻿@model IEnumerable<CourseProject.DAL.Models.EF.Customer>
 
 @{
-    ViewData["Title"] = "GetAllSeller";
+    ViewData["Title"] = "GetAllCustomer";
 }
 <style>
     .center {
@@ -9,12 +9,10 @@
     }
 </style>
 
-<h1 class="center">Працівники</h1>
-<p>
-    <a type="button" asp-action="Create" asp-controller="Seller" class="btn btn-sm btn-dark">Додати працівника</a>
-</p>
-<form asp-action="GetSellerName" asp-controller="Seller">
-    <input type="text" name="SellerName" placeholder="Пошук за Ім'ям" style="width:500px" />
+<h1 class="center">Клієнти</h1>
+
+<form asp-action="GetCustomerName" asp-controller="Customer">
+    <input type="text" name="CustomerName" placeholder="Пошук за Ім'ям" style="width:500px" />
     <button type="submit" class="search-btn">Знайти</button>
 </form>
 <table class="table">
@@ -32,6 +30,9 @@
             <th>
                 @Html.Label("Пошта")
             </th>
+            <th>
+                @Html.Label("Адреса")
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -39,10 +40,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SellerName)
+                @Html.DisplayFor(modelItem => item.CustomerName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SellerSurname)
+                @Html.DisplayFor(modelItem => item.CustomerSurname)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Phone)
@@ -51,8 +52,10 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                    <a type="button" asp-action="Delete" asp-controller="Seller" asp-route-id="@(item.Id)" class="btn btn-sm btn-danger">Видалити</a>
-                    <a type="button" asp-action="Update" asp-controller="Seller" asp-route-id="@(item.Id)" class="btn btn-sm btn-primary">Редагувати</a>
+                @Html.DisplayFor(modelItem => item.Addres)
+            </td>
+            <td>
+               
             </td>
         </tr>
 }

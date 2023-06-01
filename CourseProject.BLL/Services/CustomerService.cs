@@ -67,5 +67,12 @@ namespace CourseProject.BLL.Services
             return _customerRepository.Get(id);
         }
 
+        public Customer GetCustomerName(string name)
+        {
+            var customer = _customerRepository.GetCustomerName(name);
+            if (customer is null)
+                throw new InvalidOperationException($"Клієнт з таким '{name}' не знайдений");
+            return customer;
+        }
     }
 }

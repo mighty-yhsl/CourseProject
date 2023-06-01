@@ -1,0 +1,83 @@
+﻿@model IEnumerable<CourseProject.DAL.Models.EF.Transport>
+
+@{
+    ViewData["Title"] = "Get";
+}
+
+
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+
+<h1 class="center">Електротранспорт</h1>
+
+<form asp-action="GetTransportName" asp-controller="Transport">
+    <input type="text" name="Name" placeholder="Пошук за назвою товару" style="width:500px" />
+    <button type="submit" class="search-btn">Знайти</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.Label("Назва")
+            </th>
+            <th>
+                @Html.Label("Швидкість")
+            </th>
+            <th>
+                @Html.Label("Вага")
+            </th>
+            <th>
+                @Html.Label("Потужність")
+            </th>
+            <th>
+                @Html.Label("Наявність")
+            </th>
+            <th>
+                @Html.Label("Ціна")
+            </th>
+            <th>
+                @Html.Label("Категорія")
+            </th>
+            <th>
+                @Html.Label("Виробник")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Speed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weightt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnginePower)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManufacturerId)
+            </td>
+            <td>
+                    <a type="button" asp-action="" asp-controller="Transport" asp-route-id="@(item.Id)" class="btn btn-lg btn-success">Орендувати</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

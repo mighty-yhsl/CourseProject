@@ -18,7 +18,7 @@ namespace CourseProject.BLL.Repositories
         private const string UPDATE_QUERY = "UPDATE Customer SET CustomerName = @CustomerName, CustomerSurname = @CustomerSurname, Phone = @Phone, Email = @Email, Addres = @Addres WHERE Id = @Id";
         private const string GET_BY_ID_QUERY = "SELECT c.Id, c.CustomerName, c.CustomerSurname, c.Phone, c.Email, c.Addres FROM Customer c WHERE c.Id = @Id";
         private const string GET_QUERY = "SELECT c.Id, c.CustomerName, c.CustomerSurname, c.Phone, c.Email, c.Addres FROM Customer c";
-
+        private const string GET_BY_NAME_QUERY = "SELECT c.Id, c.CustomerName, c.CustomerSurname, c.Phone, c.Email, c.Addres FROM Customer c WHERE c.CustomerName LIKE '%' + @CustomerName + '%'";
 
         public CustomerRepository(IConfiguration configuration) : base(configuration)
         {
@@ -38,6 +38,35 @@ namespace CourseProject.BLL.Repositories
                 new SqlParameter("@Addres", entity.Addres)
             };
             ExecuteScalarCommand(CREATE_QUERY, parameters);
+        }
+
+        public Customer GetCustomerName(string name)
+        {
+            Customer customer = new Customer();
+            using (var connection = new SqlConnection(con))
+            {
+                SqlParameter parameter = new SqlParameter("@CustomerName", name);
+                connection.Open();
+                using (var command = new SqlCommand(GET_BY_NAME_QUERY, connection))
+                {
+                    command.Parameters.Add(parameter);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            customer.Id = Convert.ToInt32(reader["Id"]);
+                            customer.CustomerName = Convert.ToString(reader["CustomerName"]);
+                            customer.CustomerSurname = Convert.ToString(reader["CustomerSurname"]);
+                            customer.Phone = Convert.ToString(reader["Phone"]);
+                            customer.Email = Convert.ToString(reader["Email"]);
+                            customer.Addres = Convert.ToString(reader["Addres"]);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return customer;
         }
 
         public override void Delete(Customer entity)

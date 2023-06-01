@@ -12,6 +12,11 @@ namespace CourseProject.Controllers
         { 
         }
 
+        public ActionResult Get([FromServices] TransportRepository transportRepository)
+        {
+            return View(transportRepository.Get());
+        }
+
         public ActionResult GetAllTransports([FromServices] TransportRepository transportRepository)
         {
             return View(transportRepository.Get());

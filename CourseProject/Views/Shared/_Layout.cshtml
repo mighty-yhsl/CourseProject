@@ -22,12 +22,35 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="GetAllSeller">Працівники</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("Get") || ViewContext.RouteData.Values["action"].ToString().Equals("Privacy") || ViewContext.RouteData.Values["action"].ToString().Equals("Contacts") || ViewContext.RouteData.Values["action"].ToString().Equals("AboutUs"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="Get">Каталог</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Оплата і доставка</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contacts">Контакти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">Про нас</a>
+                            </li>
+                        }
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("GetAllTransports") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllSeller") || ViewContext.RouteData.Values["action"].ToString().Equals("GetSellerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTransportName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllCustomer") || ViewContext.RouteData.Values["action"].ToString().Equals("GetCustomerName"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="GetAllTransports">Каталог</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="GetAllSeller">Працівники</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="GetAllCustomer">Клієнти</a>
+                            </li>
+                        }
+                        
+                        
                     </ul>
                 </div>
             </div>
