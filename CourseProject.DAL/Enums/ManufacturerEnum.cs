@@ -9,9 +9,9 @@ namespace CourseProject.DAL.Enums
     public enum ManufacturerEnum
     {
         XIAOMI = 1,
-        NINEBOT = 2,
-        YADEA = 3,
-        KUGOO = 4,
-        CROSSER = 5
+        NINEBOT,
+        YADEA,
+        KUGOO,
+        CROSSER
     }
 }

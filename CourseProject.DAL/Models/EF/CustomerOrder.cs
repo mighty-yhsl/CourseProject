@@ -19,6 +19,8 @@ public partial class CustomerOrder
 
     public int StatusId { get; set; }
 
+    public StatusOrder StatusOrder { get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
@@ -26,4 +28,6 @@ public partial class CustomerOrder
     public virtual Seller Seller { get; set; } = null!;
 
     public virtual StatusOrder Status { get; set; } = null!;
+
+    
 }

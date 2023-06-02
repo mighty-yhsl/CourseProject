@@ -8,10 +8,11 @@ namespace CourseProject.DAL.Enums
 {
     public enum StatusOrderEnum
     {
-        RENT = 1,
-        AWAITING_CONFIRMATION = 2,
-        CONFIRMED = 3,
-        CANCELLED = 4,
-        FOR_RENT = 5
+        WAITING_FOR_PROCESSING = 1,
+        RENT,
+        AWAITING_CONFIRMATION,
+        CONFIRMED,
+        CANCELLED,
+        FOR_RENT
     }
 }

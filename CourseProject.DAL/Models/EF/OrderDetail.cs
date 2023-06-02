@@ -15,6 +15,8 @@ public partial class OrderDetail
 
     public int TransportId { get; set; }
 
+    public string Title { get; set; }
+
     public virtual CustomerOrder CustomerOrder { get; set; } = null!;
 
     public virtual Transport Transport { get; set; } = null!;

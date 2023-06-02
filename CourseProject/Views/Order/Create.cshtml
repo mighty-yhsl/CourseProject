@@ -1,0 +1,105 @@
+﻿@model CourseProject.ViewModels.OrderVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+@{
+    DateTime UpdateDate = DateTime.Now.AddDays(7);
+}
+
+<style>
+    .center {
+        text-align: center;
+    }
+
+
+</style>
+
+<h1 class="center">Замовлення</h1>
+<table class="table" >
+    <thead>
+        <tr>
+            <th style = "text-align:center">Транспорт</th>
+            <th style = "text-align:center">Ціна</th>
+            <th style = "text-align:center">Кількість</th>
+            <th style = "text-align:center">Загальна Ціна</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td class="center">@item.Transport.Name</td>
+                <td class="center">@item.Transport.Price.ToString("C")</td>
+                <td>
+                    <div class="input-group">
+                        <input type="number" class="form-control" style="text-align:center; width:70px" value="@item.Count" readonly>
+                    </div>
+                </td>
+                <td class="center">@((item.Transport.Price * item.Count).ToString("C"))</td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <strong>Ціна за 7 днів: @Model.Items.Sum(s=>s.Count*s.Transport.Price*7).ToString("C")</strong>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<div style="display:flex; width:100%">
+    <div class="row" style="width:30%; margin-right:15px">
+
+            <form asp-action="TryCreate">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CustomerName" class="control-label"> Ім'я Клієнта</label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Addres" class="control-label"> Адреса(Харків)</label>
+                    <input asp-for="Addres" class="form-control" />
+                    <span asp-validation-for="Addres" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Пошта</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label">Телефон</label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Коментар</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4" style="display:flex">
+                    <input type="submit" style="margin-right:10px" value="Create" class="btn btn-lg btn-primary" />
+                    <a type="button" asp-action="Get" asp-controller="Transport" class="btn btn-lg btn-dark">Повернутися до каталогу</a>
+                </div>
+            </form>
+ 
+    </div>
+    <div style="width:30%">
+        <label asp-for="CreateDate" class="control-label">Дата створення</label>
+        <input asp-for="CreateDate" class="form-control" value="@(Model?.CreateDate.ToString("yyyy-MM-dd HH:mm") ?? "")" disabled/>
+        <span asp-validation-for="CreateDate" class="text-danger"></span>
+
+        <label asp-for="UpdateDate" class="control-label">Дата закінчення</label>
+        <input asp-for="UpdateDate" class="form-control" value="@(Model?.UpdateDate.ToString("yyyy-MM-dd HH:mm") ?? "")" disabled/>
+        <span asp-validation-for="UpdateDate" class="text-danger"></span>
+    </div>
+  
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

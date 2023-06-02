@@ -1,0 +1,111 @@
+﻿@model CourseProject.ViewModels.OrderVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>OrderVM</h4>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Транспорт</th>
+            <th>Ціна</th>
+            <th>Кількість</th>
+            <th>Разом</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td class="align-middle">@item.Transport.Name</td>
+                <td class="align-middle">@item.Transport.Price.ToString("C")</td>
+                <td>
+                    <div class="input-group">
+                        <a class="btn btn-outline-secondary" type="button" asp-action="Decrease" asp-route-customerorderid="@Model.Id" asp-route-productid="@item.Transport.Id">-</a>
+                        <input type="text" class="form-control" style="text-align:center" value="@item.Count" readonly>
+                        <a class="btn btn-outline-secondary" type="button" asp-action="Increase" asp-route-customerorderid="@Model.Id" asp-route-productid="@item.Transport.Id">+</a>
+                    </div>
+                </td>
+                <td class="align-middle">@((item.Transport.Price * item.Count).ToString("C"))</td>
+                <td>
+                    <a class="btn btn-danger" asp-action="DeleteDetails" asp-route-customerorderid="@Model.Id" asp-route-productid="@item.Transport.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <select class="form-select" asp-items="@ViewBag.Transport" id="selectedTransport">
+                    <option selected disabled>Оберіть Транспорт</option>
+                </select>
+            </td>
+            <td><button class="btn btn-primary" onclick="addTransport(@Model.Id)">Додати транспорт</button></td>
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="TryEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CustomerName" class="control-label"> Ім'я Клієнта</label>
+                <input asp-for="CustomerName" class="form-control" />
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Addres" class="control-label"> Адреса</label>
+                <input asp-for="Addres" class="form-control" />
+                <span asp-validation-for="Addres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Пошта</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label">Телефон</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Коментар</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateDate" class="control-label">Дата створення</label>
+                <input asp-for="CreateDate" class="form-control" />
+                <span asp-validation-for="CreateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateDate" class="control-label">Дата закінчення</label>
+                <input asp-for="UpdateDate" class="form-control" />
+                <span asp-validation-for="UpdateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-route-id="@Model.Id">Повернутися до замовлення</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function addTransport(customerOrderId) {
+            var transportId = document.getElementById('selectedProduct').value;
+            var url = '@Url.Action("AddItem", "Order")?customerOrderId=' + customerOrderId + '&transportId=' + transportId;
+            window.location.href = url;
+        }
+    </script>
+}

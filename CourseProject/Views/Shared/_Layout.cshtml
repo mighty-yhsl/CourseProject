@@ -36,8 +36,11 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">Про нас</a>
                             </li>
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Details">Кошик</a>
+                            </li>
                         }
-                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("GetAllTransports") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllSeller") || ViewContext.RouteData.Values["action"].ToString().Equals("GetSellerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTransportName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllCustomer") || ViewContext.RouteData.Values["action"].ToString().Equals("GetCustomerName"))
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("GetAllTransports") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllSeller") || ViewContext.RouteData.Values["action"].ToString().Equals("GetSellerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTransportName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllCustomer") || ViewContext.RouteData.Values["action"].ToString().Equals("GetCustomerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllOrders"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="GetAllTransports">Каталог</a>
@@ -47,6 +50,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="GetAllCustomer">Клієнти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="GetAllOrders">Перелік замовлень</a>
                             </li>
                         }
                         

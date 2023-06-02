@@ -9,9 +9,9 @@ namespace CourseProject.DAL.Enums
     public enum CategoryEnum
     {
         ELECTRIC_SCOOTERS = 1,
-        GYROBOARDS = 2,
-        MONOWHEELS = 3,
-        GYROSCOOTERS = 4,
-        ELECTRIC_SKATEBOARDS = 5
+        GYROBOARDS,
+        MONOWHEELS,
+        GYROSCOOTERS,
+        ELECTRIC_SKATEBOARDS
     }
 }

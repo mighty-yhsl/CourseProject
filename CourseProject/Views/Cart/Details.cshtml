@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CourseProject.ViewModels.CartVM>
+@{
+    ViewData["Title"] = "Details";
+}
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+
+<h1 class="center">Кошик</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Транспорт</th>
+            <th>Ціна</th>
+            <th style="text-align:center">Кількість</th>
+            <th style="text-align:center">Загальна ціна</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle">@item.Transport.Name</td>
+                <td class="align-middle">@item.Transport.Price.ToString("C")</td>
+                <td>
+                    <div class="input-group">
+                        <a class="btn btn-outline-secondary" type="button" asp-action="Decrease" asp-route-id="@item.Transport.Id">-</a>
+                        <input type="number" class="form-control" style="text-align:center; width:70px" value="@item.Count" readonly>
+                        <a class="btn btn-outline-secondary" type="button" asp-action="Increase" asp-route-id="@item.Transport.Id">+</a>
+                    </div>
+                </td>
+                <td class="center">@((item.Transport.Price * item.Count).ToString("C"))</td>
+                <td>
+                    <a class="btn btn-danger" asp-action="Remove" asp-route-id="@item.Transport.Id">Видалити</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.Any())
+{
+    <span><strong>Разом: @Model.Sum(s=>s.Count*s.Transport.Price).ToString("C")</strong></span>
+    <br>
+    <br>
+    <a class="btn btn-primary" asp-action="Create" asp-controller="Order">Оформити замовлення</a>
+    <a class="btn btn-dark" asp-action="Get" asp-controller="Transport">Повернутися назад</a>
+}

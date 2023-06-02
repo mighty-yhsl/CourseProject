@@ -15,11 +15,13 @@ namespace CourseProject.BLL.Services
     {
         private OrderValidator _orderValidator;
         private OrderRepository _orderRepository;
+        private TransportRepository _transportRepository;
 
-        public OrderService(OrderRepository orderRepository, OrderValidator orderValidator)
+        public OrderService(OrderRepository orderRepository, OrderValidator orderValidator, TransportRepository transportRepository)
         {
             _orderValidator = orderValidator;
             _orderRepository = orderRepository;
+            _transportRepository = transportRepository; 
         }
         
         public void CreateOrder(CustomerOrder order)
@@ -50,15 +52,19 @@ namespace CourseProject.BLL.Services
             _orderRepository.CreateDetails(detail);
         }
 
-        public void UpdateOrder(CustomerOrder order)
+
+
+        public void Update(CustomerOrder order)
         {
+            if (_orderRepository.Get(order.Id) is null)
+                throw new Exception($"CustomerOrder with ID {order.Id} is not found");
             try
             {
                 _orderValidator.Validate(order);
             }
             catch (ArgumentException)
             {
-                throw new InvalidOperationException($"Order not Updated");
+                throw;
             }
             _orderRepository.Update(order);
         }
@@ -84,14 +90,42 @@ namespace CourseProject.BLL.Services
             _orderRepository.Delete(order);
         }
 
-        /*public void DeleteDetails(int TransportId, int CustomerOrderId)
+        public void DeleteDetails(int transportId, int CustomerOrderId)
         {
-            var detail = _orderRepository.Get(id);
-            if (detail is null)
-                throw new InvalidOperationException($"OrderDetail with id {id} is not found");
-            _orderRepository.DeleteDetails(detail);
-        }*/
+            _orderRepository.DeleteDetails(transportId, CustomerOrderId);
+        }
 
-      
+        public OrderDetail GetDetails(int transportId, int customerOrderId)
+        {
+            return _orderRepository.GetDetails(transportId, customerOrderId);
+        }
+
+        public void UpdateDetail(OrderDetail detail)
+        {
+            _orderRepository.UpdateDetails(detail);
+        }
+
+
+        public IEnumerable<CustomerOrder> Get()
+        {
+            return _orderRepository.Get();
+        }
+        public CustomerOrder Get(int id)
+        {
+            return _orderRepository.Get(id);
+        }
+
+        public void AddDetails(int transportId, int customerOrderId)
+        {
+            var transport = _transportRepository.Get(transportId);
+            _orderRepository.CreateDetails(new OrderDetail
+            {
+                TotalPrice = transport.Price,
+                TransportId = transportId,
+                CustomerOrderId = customerOrderId,
+                TotalAmount = 1,
+                Title = transport.Name
+            });
+        }
     }
 }

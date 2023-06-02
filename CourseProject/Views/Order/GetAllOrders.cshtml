@@ -1,0 +1,89 @@
+﻿@model IEnumerable<CourseProject.DAL.Models.EF.CustomerOrder>
+
+@{
+    ViewData["Title"] = "GetAllOrders";
+}
+
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
+
+<h1 class="center">Перелік замовлень</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.Label("Номер")
+            </th>
+            <th>
+                @Html.Label("Ім'я")
+            </th>
+            <th>
+                @Html.Label("Прізвище")
+            </th>
+            <th>
+                @Html.Label("Адреса")
+            </th>
+            <th>
+                @Html.Label("Пошта")
+            </th>
+            <th>
+                @Html.Label("Телефон")
+            </th>
+            <th>
+                @Html.Label("Коментар")
+            </th>
+            <th>
+                @Html.Label("Дата створення")
+            </th>
+            <th>
+                @Html.Label("Дата закінчення")
+            </th>
+            <th>
+                @Html.Label("Статус")
+            </th>       
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer.CustomerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer.CustomerSurname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer.Addres)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customer.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreateDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdateDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusOrder.StatusOrderName)
+                </th>
+            <td>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

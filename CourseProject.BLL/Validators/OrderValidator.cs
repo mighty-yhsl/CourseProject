@@ -21,7 +21,7 @@ namespace CourseProject.BLL.Validators
             {
                 throw new ArgumentException("Description was greater then max length value or Description is not null");
             }
-            if (order.CreateDate > DateTime.Now)
+            if (order.UpdateDate > DateTime.Now)
             {
                 throw new ArgumentException("CreateDate cannot be in the future");
             }

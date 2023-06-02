@@ -19,17 +19,19 @@ namespace CourseProject.BLL.Repositories
         private const string DELETE_QUERY = "DELETE FROM CustomerOrder WHERE Id = @Id";
         private const string DELETE_QUERY_DETAILS = "DELETE FROM OrderDetails WHERE TransportId = @TransportId AND CustomerOrderId = @CustomerOrderId";
         private const string UPDATE_QUERY = "UPDATE CustomerOrders SET Description = @Description, CreateDate = @CreateDate, UpdateDate = @UpdateDate, SellerId = @SellerId, CustomerId = @CustomerId, StatusId = @StatusId WHERE Id = @Id";
-        private const string UPDATE_QUERY_DETAILS = "UPDATE OrderDetails SET TotalAmount = @TotalAmount, TotalPrice = @TotalPrice, CustomerOrderId = @CustomerOrderId, TransportId = @TransportId";
+        private const string UPDATE_QUERY_DETAILS = "UPDATE OrderDetails SET TotalAmount = @TotalAmount, TotalPrice = @TotalPrice WHERE CustomerOrderId = @CustomerOrderId, TransportId = @TransportId";
         private const string GET_BY_ID_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetail_Id, od.TotalAmount, od.TotalPrice, od.CustomerOrderId, od.TransportId, so.Id AS Status_Id, so.Name FROM CustomerOrders co LEFT JOIN OrderDetails od ON co.Id = od.CustomerOrderId LEFT JOIN StatusOrders so ON co.StatusId = so.Id LEFT JOIN Transports t ON od.TransportId = t.Id WHERE co.Id = @Id";
-        private const string GET_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetailId, od.TotalAmount, od.TotalPrice, od.TransportId FROM CustomerOrders co INNER JOIN OrderDetails od ON co.Id = od.CustomerOrderId";
+        private const string GET_QUERY = "SELECT co.Id, c.CustomerName,c.CustomerSurname, c.Addres, c.Email, c.Phone, co.Description, co.CreateDate, co.UpdateDate, so.StatusOrderName,so.StatusOrderName, od.TotalAmount, od.TotalPrice FROM CustomerOrder co JOIN Customer c ON co.CustomerId = c.Id JOIN OrderDetails od ON co.Id = od.CustomerOrderId JOIN StatusOrder so ON co.StatusId = so.Id";
+        private const string GET_QUERY_DETAILS = "SELECT TransportId, CustomerOrderId, TotalAmount, OrderDetails.TotalPrice, Transport.Name as 'Title' FROM OrderDetails INNER JOIN Transport ON OrderDetails.TransportId = Transport.Id WHERE CustomerOrderId = @CustomerOrderId AND TransportId = @TransportId";
 
-        
         public OrderRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
 
         public OrderRepository() { }
+
+
 
         public override void Create(CustomerOrder entity)
         {
@@ -54,10 +56,10 @@ namespace CourseProject.BLL.Repositories
         {
             var parameters = new SqlParameter[]
             {
-                new SqlParameter("@TotalAmount", order.TotalAmount),
-                new SqlParameter("@TotalPrice", order.TotalPrice),
+                new SqlParameter("@TransportId", order.TransportId),
                 new SqlParameter("@CustomerOrderId", order.CustomerOrderId),
-                new SqlParameter("@TransportId", order.TransportId)
+                new SqlParameter("@TotalAmount", order.TotalAmount),
+                new SqlParameter("@TotalPrice", order.TotalPrice)
             };
             ExecuteScalarCommand(CREATE_QUERY_ORDERDETAILS, parameters);
         }
@@ -76,41 +78,44 @@ namespace CourseProject.BLL.Repositories
 
         public override CustomerOrder Get(int id)
         {
-           CustomerOrder customerorder = new CustomerOrder();
-           using (var connection = new SqlConnection(con))
-           {
-                SqlParameter parameter = new SqlParameter("@Id", id);
+            CustomerOrder customerOrder = null;
+
+            using (var connection = new SqlConnection(con))
+            {
                 connection.Open();
+
                 using (var command = new SqlCommand(GET_BY_ID_QUERY, connection))
                 {
-                    command.Parameters.Add(parameter);
+                    command.Parameters.AddWithValue("@Id", id);
 
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            customerorder.Id = Convert.ToInt32(reader["Id"]);
-                            customerorder.Description = Convert.ToString(reader["Description"]);
-                            customerorder.CreateDate = Convert.ToDateTime(reader["CreateDate"]);
-                            customerorder.UpdateDate = Convert.ToDateTime(reader["UpdateDate"]);
-                            customerorder.SellerId = Convert.ToInt32(reader["SellerId"]);
-                            customerorder.CustomerId = Convert.ToInt32(reader["CustomerId"]);
-                            customerorder.StatusId = Convert.ToInt32(reader["StatusId"]);
-
-                            customerorder.OrderDetails = new List<OrderDetail>
+                            customerOrder = new CustomerOrder
                             {
-                                new OrderDetail
-                                {
-                                    TotalAmount = Convert.ToInt32(reader["TotalAmount"]),
-                                    TotalPrice = Convert.ToDecimal(reader["TotalPrice"])
-                                }
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Description = reader.GetString(reader.GetOrdinal("Description")),
+                                CreateDate = reader.GetDateTime(reader.GetOrdinal("CreateDate")),
+                                UpdateDate = reader.GetDateTime(reader.GetOrdinal("UpdateDate")),
+                                SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),
+                                CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId")),
+                                StatusId = reader.GetInt32(reader.GetOrdinal("StatusId")),
+                                OrderDetails = new List<OrderDetail>
+                        {
+                            new OrderDetail
+                            {
+                                TotalAmount = reader.GetInt32(reader.GetOrdinal("TotalAmount")),
+                                TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice"))
+                            }
+                        }
                             };
                         }
                     }
                 }
-                connection.Close();
             }
-            return customerorder;
+
+            return customerOrder;
         }
 
 
@@ -121,72 +126,161 @@ namespace CourseProject.BLL.Repositories
             using (var connection = new SqlConnection(con))
             {
                 connection.Open();
+
                 using (var command = new SqlCommand(GET_QUERY, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
-                        int previousOrderId = 0;
-                        CustomerOrder customerOrder = null;
-
                         while (reader.Read())
                         {
-                            int orderId = Convert.ToInt32(reader["Id"]);
-
-                            if (orderId != previousOrderId)
+                            CustomerOrder customerOrder = new CustomerOrder()
                             {
-                                customerOrder = new CustomerOrder();
-                                customerOrder.Id = orderId;
-                                customerOrder.Description = Convert.ToString(reader["Description"]);
-                                customerOrder.CreateDate = Convert.ToDateTime(reader["CreateDate"]);
-                                customerOrder.UpdateDate = Convert.ToDateTime(reader["UpdateDate"]);
-                                customerOrder.SellerId = Convert.ToInt32(reader["SellerId"]);
-                                customerOrder.CustomerId = Convert.ToInt32(reader["CustomerId"]);
-                                customerOrder.StatusId = Convert.ToInt32(reader["StatusId"]);
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                CreateDate = reader.GetDateTime(reader.GetOrdinal("CreateDate")),
+                                UpdateDate = reader.GetDateTime(reader.GetOrdinal("UpdateDate")),
+                                Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
+                                SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),
+                                StatusId = reader.GetInt32(reader.GetOrdinal("StatusId")),
+                                Customer = new Customer()
+                                {
+                                    CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
+                                    CustomerSurname = reader.GetString(reader.GetOrdinal("CustomerSurname")),
+                                    Addres = reader.GetString(reader.GetOrdinal("Addres")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    Phone = reader.GetString(reader.GetOrdinal("Phone"))
+                                },
+                                StatusOrder = new StatusOrder()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("StatusId")),
+                                    StatusOrderName = reader.GetString(reader.GetOrdinal("StatusOrderName"))
+                                }
+                            };
 
-                                customerOrder.OrderDetails = new List<OrderDetail>();
-                                customerOrders.Add(customerOrder);
+                            OrderDetail detail = new OrderDetail()
+                            {
+                                TotalAmount = reader.GetInt32(reader.GetOrdinal("TotalAmount")),
+                                TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice"))
+                            };
 
-                                previousOrderId = orderId;
-                            }
-                            OrderDetail orderDetail = new OrderDetail();
-                            orderDetail.Id = Convert.ToInt32(reader["OrderDetailId"]);
-                            orderDetail.TotalAmount = Convert.ToInt32(reader["TotalAmount"]);
-                            orderDetail.TotalPrice = Convert.ToDecimal(reader["TotalPrice"]);
-                            orderDetail.TransportId = Convert.ToInt32(reader["TransportId"]);
+                            customerOrder.OrderDetails.Add(detail);
 
-                            customerOrder.OrderDetails.Add(orderDetail);
+                            customerOrders.Add(customerOrder);
                         }
                     }
                 }
-                connection.Close();
             }
+
             return customerOrders;
         }
 
 
+        public void Update(CustomerOrder entity, Transport transport, Customer customer)
+        {
+            using (var connection = new SqlConnection(con))
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                       
+                        var orderUpdateQuery = "UPDATE CustomerOrder SET Description = @Description, CreateDate = @CreateDate, UpdateDate = @UpdateDate WHERE Id = @OrderId";
+                        var orderUpdateCommand = new SqlCommand(orderUpdateQuery, connection, transaction);
+                        orderUpdateCommand.Parameters.AddWithValue("@Description", entity.Description);
+                        orderUpdateCommand.Parameters.AddWithValue("@CreateDate", entity.CreateDate);
+                        orderUpdateCommand.Parameters.AddWithValue("@UpdateDate", entity.UpdateDate);
+                        orderUpdateCommand.Parameters.AddWithValue("@OrderId", entity.Id);
+                        orderUpdateCommand.ExecuteNonQuery();
+
+                        
+                        var transportUpdateQuery = "UPDATE Transport SET Name = @Name, Price = @Price, Amount = @Amount WHERE Id = @TransportId";
+                        var transportUpdateCommand = new SqlCommand(transportUpdateQuery, connection, transaction);
+                        transportUpdateCommand.Parameters.AddWithValue("@Name", transport.Name);
+                        transportUpdateCommand.Parameters.AddWithValue("@Price", transport.Price);
+                        transportUpdateCommand.Parameters.AddWithValue("@Amount", transport.Amount);
+                        transportUpdateCommand.Parameters.AddWithValue("@TransportId", transport.Id);
+                        transportUpdateCommand.ExecuteNonQuery();
+
+                        
+                        var customerUpdateQuery = "UPDATE Customer SET CustomerName = @CustomerName, CustomerSurname = @CustomerSurname, Addres = @Addres, Email = @Email, Phone = @Phone WHERE Id = @CustomerId";
+                        var customerUpdateCommand = new SqlCommand(customerUpdateQuery, connection, transaction);
+                        customerUpdateCommand.Parameters.AddWithValue("@CustomerName", customer.CustomerName);
+                        customerUpdateCommand.Parameters.AddWithValue("@CustomerSurname", customer.CustomerSurname);
+                        customerUpdateCommand.Parameters.AddWithValue("@Addres", customer.Addres);
+                        customerUpdateCommand.Parameters.AddWithValue("@Email", customer.Email);
+                        customerUpdateCommand.Parameters.AddWithValue("@Phone", customer.Phone);
+                        customerUpdateCommand.Parameters.AddWithValue("@CustomerId", customer.Id);
+                        customerUpdateCommand.ExecuteNonQuery();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Failed to update entities. Transaction rolled back.", ex);
+                    }
+                }
+                connection.Close();
+            }
+        }
+
         public override void Update(CustomerOrder entity)
         {
-            var parameters = new SqlParameter[] {
+            var parameters = new SqlParameter[]
+            {
             new SqlParameter("@Description", entity.Description),
             new SqlParameter("@CreateDate", entity.CreateDate),
             new SqlParameter("@UpdateDate", entity.UpdateDate),
             new SqlParameter("@SellerId", entity.SellerId),
             new SqlParameter("@CustomerId", entity.CustomerId),
             new SqlParameter("@StatusId", entity.StatusId),
+            new SqlParameter("@Id", entity.Id)
             };
+
             ExecuteCommand(UPDATE_QUERY, parameters);
-
         }
-
-         public void UpdateDetails(OrderDetail detail)
-         {
+        public void UpdateDetails(OrderDetail detail)
+        {
             var parameters = new SqlParameter[] {
-            new SqlParameter("@Description", detail.TotalAmount),
-            new SqlParameter("@CreateDate", detail.TotalPrice),
-            new SqlParameter("@UpdateDate", detail.CustomerOrderId),
-            new SqlParameter("@SellerId", detail.TransportId),
+            new SqlParameter("@TransportId", detail.TransportId),
+            new SqlParameter("@CustomerOrderId", detail.CustomerOrderId),
+            new SqlParameter("@TotalAmount", detail.TotalAmount),
+            new SqlParameter("@TotalPrice", detail.TotalPrice)
             };
             ExecuteCommand(UPDATE_QUERY_DETAILS, parameters);
-         }
+        }
+
+        public OrderDetail GetDetails(int productId, int customerOrderId)
+        {
+            using (var connection = new SqlConnection(con))
+            {
+                connection.Open();
+
+                var command = new SqlCommand(GET_QUERY_DETAILS, connection);
+                command.Parameters.AddWithValue("@CustomerOrderId", customerOrderId);
+                command.Parameters.AddWithValue("@TransportId", productId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var transportId = (int)reader["TransportId"];
+                        var totalAmount = (int)reader["TotalAmount"];
+                        var totalPrice = (decimal)reader["TotalPrice"];
+                        var title = (string)reader["Title"];
+
+                        return new OrderDetail
+                        {
+                            TransportId = transportId,
+                            CustomerOrderId = customerOrderId,
+                            TotalAmount = totalAmount,
+                            TotalPrice = totalPrice,
+                            Title = title
+                        };
+                    }
+                }
+                return null; 
+            }
+        }
     }
 }
