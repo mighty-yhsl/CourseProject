@@ -15,10 +15,10 @@ namespace CourseProject.Controllers
         private readonly OrderService customerOrderService;
         private readonly TransportService transportService;
 
-        public OrderController(OrderService customerOrderService, TransportService productService)
+        public OrderController(OrderService customerOrderService, TransportService transportService)
         {
             this.customerOrderService = customerOrderService;
-            this.transportService = productService;
+            this.transportService = transportService;
         }
 
         public ActionResult Complete()
@@ -26,14 +26,14 @@ namespace CourseProject.Controllers
             return View();
         }
 
-        public ActionResult Details([FromServices] SellerService sellerService, [FromServices] OrderService customerOrderService, int id)
+        public ActionResult Details([FromServices] SellerService sellerService, [FromServices] OrderService customerOrderService, int id )
         {
             var order = customerOrderService.Get(id);
             var seller_ = sellerService.Get(id);
-            if (order.SellerId == seller_.Id)
+            if ((order.SellerId == seller_.Id))
             {
-                var @seller = sellerService.Get(order.SellerId);
-                ViewData["seller"] = $"{@seller.SellerName} {@seller.SellerSurname}";
+                var seller = sellerService.Get(order.SellerId);
+                ViewData["seller"] = $"{seller.SellerName} {seller.SellerSurname}";
             }
             return View(order);
         }
@@ -67,7 +67,7 @@ namespace CourseProject.Controllers
 
         public ActionResult TryEdit([FromServices] OrderService orderService, OrderVM model)
         {
-            var order = orderService.Get(model.Id.Value);
+            var order = orderService.Get(model.Id);
 
             order.Customer.CustomerName = model.CustomerName;
             order.Customer.Addres = model.Addres;
@@ -77,12 +77,12 @@ namespace CourseProject.Controllers
 
             orderService.Update(order);
 
-            return RedirectToAction(controllerName: "Order", actionName: "Details", routeValues: new { id = model.Id });
+            return RedirectToAction(controllerName: "Order", actionName: "Details");
         }
 
         public ActionResult Create([FromServices] CustomerService customerService)
         {
-            var model = new OrderVM
+            var model = new OrderVM()
             {
                 CreateDate = DateTime.Now,
                 UpdateDate = DateTime.Now.AddDays(7)
@@ -106,23 +106,23 @@ namespace CourseProject.Controllers
         {
             model.Items = JsonSerializer.Deserialize<List<CartVM>>(HttpContext.Session.GetString("cart"));
 
+           
             var customer = new Customer
             {
-                CustomerName = model.CustomerName,
-                Email = model.Email,
-                Phone = model.Phone,
-                Addres = model.Addres
+                Id = model.Id,
             };
 
             var order = new CustomerOrder
             {
                 Customer = customer,
                 CreateDate = DateTime.Now,
-                UpdateDate = DateTime.Now.AddDays(20),
-                StatusId = model.StatusId,
+                UpdateDate = DateTime.Now,
+                StatusId = 1,
                 Description = model.Description,
+                SellerId = 1,
                 OrderDetails = model.Items.Select(s => new OrderDetail
                 {
+                    Id = model.Id,
                     TransportId = s.Transport.Id,
                     TotalAmount = s.Count,
                     TotalPrice = s.Count * s.Transport.Price,

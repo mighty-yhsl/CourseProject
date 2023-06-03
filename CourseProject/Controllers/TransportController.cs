@@ -53,6 +53,36 @@ namespace CourseProject.Controllers
             }
         }
 
+        public ActionResult GetTName([FromServices] TransportService transportService, TransportVM model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.Name))
+                {
+                    Transport transport = transportService.GetTransportName(model.Name);
+                    if (transport != null)
+                    {
+                        var transportList = new List<Transport> { transport };
+                        return View(transportList);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Transport not found !");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Name is null or empty!");
+                }
+
+                return Redirect("/transport/GetAllTransports");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewData["Exception"] = ex.Message;
+                return View("/transport/GetAllTransports");
+            }
+        }
         public ActionResult Create() 
         {
             return View();

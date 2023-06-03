@@ -22,7 +22,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
                         </li>
-                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("Get") || ViewContext.RouteData.Values["action"].ToString().Equals("Privacy") || ViewContext.RouteData.Values["action"].ToString().Equals("Contacts") || ViewContext.RouteData.Values["action"].ToString().Equals("AboutUs"))
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("Get") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTName") || ViewContext.RouteData.Values["action"].ToString().Equals("Privacy") || ViewContext.RouteData.Values["action"].ToString().Equals("Contacts") || ViewContext.RouteData.Values["action"].ToString().Equals("AboutUs"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="Get">Каталог</a>

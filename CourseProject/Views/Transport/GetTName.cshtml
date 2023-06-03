@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CourseProject.DAL.Models.EF.Transport>
 
 @{
-    ViewData["Title"] = "GetAllTransports";
+    ViewData["Title"] = "GetTransportName";
 }
 
 <style>
@@ -12,9 +12,7 @@
 
 <h1 class="center">Електротранспорт</h1>
 
-<p>
-    <a type="button" asp-action="Create" asp-controller="Transport" class="btn btn-sm btn-dark">Додати товар</a>
-</p>
+
 <form asp-action="GetTransportName" asp-controller="Transport">
     <input type="text" name="Name" placeholder="Пошук за назвою товару" style="width:500px" />
     <button type="submit" class="search-btn">Знайти</button>
@@ -50,37 +48,37 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
                 <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.Speed)
-            </td>
+                    @Html.DisplayFor(modelItem => item.Speed)
+                </td>
                 <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.Weightt)
-            </td>
+                    @Html.DisplayFor(modelItem => item.Weightt)
+                </td>
                 <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.EnginePower)
-            </td>
+                    @Html.DisplayFor(modelItem => item.EnginePower)
+                </td>
                 <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
-            </td>
-            <td>
-                <a type="button" asp-action="Delete" asp-controller="Transport" asp-route-id="@(item.Id)" class="btn btn-sm btn-danger">Видалити</a>
-                <a type="button" asp-action="Update" asp-controller="Transport" asp-route-id="@(item.Id)" class="btn btn-sm btn-primary">Редагувати</a>
-            </td>
-        </tr>
-}
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
+                </td>
+                <td>
+                    <a type="button" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@(item.Id)" class="btn btn-lg btn-success">Орендувати</a>
+                </td>
+            </tr>
+        }
     </tbody>
-</table> 
+</table>

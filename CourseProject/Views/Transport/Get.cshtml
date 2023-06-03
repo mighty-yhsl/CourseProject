@@ -13,7 +13,7 @@
 
 <h1 class="center">Електротранспорт</h1>
 
-<form asp-action="GetTransportName" asp-controller="Transport">
+<form asp-action="GetTName" asp-controller="Transport">
     <input type="text" name="Name" placeholder="Пошук за назвою товару" style="width:500px" />
     <button type="submit" class="search-btn">Знайти</button>
 </form>
@@ -53,16 +53,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td style="text-align:center">
                 @Html.DisplayFor(modelItem => item.Speed)
             </td>
-            <td>
+            <td style="text-align:center">
                 @Html.DisplayFor(modelItem => item.Weightt)
-            </td>
-            <td>
+            </td style="text-align:center">
+            <td style="text-align:center">
                 @Html.DisplayFor(modelItem => item.EnginePower)
             </td>
-            <td>
+            <td style="text-align:center">
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>

@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<CourseProject.DAL.Models.EF.CustomerOrder>
-
 @{
     ViewData["Title"] = "GetAllOrders";
 }
@@ -15,26 +14,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="text-align:center">
                 @Html.Label("Номер")
             </th>
-            <th>
-                @Html.Label("Ім'я")
-            </th>
-            <th>
-                @Html.Label("Прізвище")
-            </th>
-            <th>
-                @Html.Label("Адреса")
-            </th>
-            <th>
-                @Html.Label("Пошта")
-            </th>
-            <th>
-                @Html.Label("Телефон")
-            </th>
-            <th>
-                @Html.Label("Коментар")
+            <th style="text-align:center">
+                @Html.Label("Клієнт")
             </th>
             <th>
                 @Html.Label("Дата створення")
@@ -43,47 +27,54 @@
                 @Html.Label("Дата закінчення")
             </th>
             <th>
+                @Html.Label("Ціна")
+            </th>
+            <th>
+                @Html.Label("Кількість")
+            </th>
+            <th>
+                @Html.Label("Коментар")
+            </th>
+            <th>
                 @Html.Label("Статус")
-            </th>       
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Customer.CustomerName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Customer.CustomerSurname)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Customer.Addres)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Customer.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Customer.Phone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreateDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UpdateDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StatusOrder.StatusOrderName)
-                </th>
-            <td>
-            </td>
-        </tr>
-}
+        @foreach (var order in Model)
+        {
+            @foreach (var detail in order.OrderDetails)
+            {
+                <tr>
+                    <td style="text-align:center">
+                        @Html.DisplayFor(modelItem => order.Id)
+                    </td>
+                    <td style="text-align:center">
+                        @Html.DisplayFor(modelItem => order.Customer.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => order.CreateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => order.UpdateDate)
+                    </td>
+                    <td style="text-align:center">
+                        @Html.DisplayFor(modelItem => detail.TotalPrice)
+                    </td>
+                    <td style="text-align:center">
+                        @Html.DisplayFor(modelItem => detail.TotalAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => order.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => order.StatusOrder.StatusOrderName)
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
