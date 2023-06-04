@@ -38,6 +38,12 @@ namespace CourseProject.Controllers
             return View(order);
         }
 
+
+        public ActionResult Get([FromServices] OrderRepository orderRepository)
+        {
+            return View(orderRepository.Get());
+        }
+
         public ActionResult GetAllOrders([FromServices] OrderRepository orderRepository)
         {
             return View(orderRepository.Get());
@@ -168,21 +174,55 @@ namespace CourseProject.Controllers
             return RedirectToAction(controllerName: "Order", actionName: "Edit");
         }
 
-        public ActionResult Confirm([FromServices] OrderService orderService,int id)
+        public ActionResult Confirm([FromServices] OrderService orderService, int id)
         {
             var customerOrder = orderService.Get(id);
-            customerOrder.StatusOrder.Id = 3;
-            orderService.Update(customerOrder);
-            return RedirectToAction(controllerName: "Order", actionName: "GetAllOrders");
+
+            if (customerOrder != null)
+            {
+                if (customerOrder.StatusOrder == null)
+                {
+                    customerOrder.StatusOrder = new StatusOrder();
+                }
+                customerOrder.StatusOrder.Id = 2;
+                orderService.Update(customerOrder);
+            }
+
+            return RedirectToAction("GetAllOrders", "Order");
         }
 
         public ActionResult Decline([FromServices] OrderService orderService, int id)
         {
             var customerOrder = orderService.Get(id);
-            customerOrder.StatusOrder.Id = 4;
-            customerOrder.Seller.Id = Convert.ToInt32(HttpContext.User.Claims.First(s => s.Type == "Id").Value);
-            orderService.Update(customerOrder);
-            return RedirectToAction(controllerName: "Order", actionName: "GetAllOrders");
+
+            if (customerOrder != null)
+            {
+                if (customerOrder.StatusOrder == null)
+                {
+                    customerOrder.StatusOrder = new StatusOrder();
+                }
+                customerOrder.StatusOrder.Id = 3;
+                orderService.Update(customerOrder);
+            }
+
+            return RedirectToAction("GetAllOrders", "Order");
+        }
+
+        public ActionResult Returned([FromServices] OrderService orderService, int id)
+        {
+            var customerOrder = orderService.Get(id);
+
+            if (customerOrder != null)
+            {
+                if (customerOrder.StatusOrder == null)
+                {
+                    customerOrder.StatusOrder = new StatusOrder();
+                }
+                customerOrder.StatusOrder.Id = 6;
+                orderService.Update(customerOrder);
+            }
+
+            return RedirectToAction("GetAllOrders", "Order");
         }
     }
 }

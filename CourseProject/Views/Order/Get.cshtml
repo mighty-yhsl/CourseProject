@@ -72,13 +72,6 @@
                         @Html.DisplayFor(modelItem => order.StatusOrder.StatusOrderName)
                     </td>
                     <td>
-                        <a type="button" asp-action="Confirm" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-sm btn-success">Підтвердити</a>
-                    </td>
-                    <td>
-                        <a type="button" asp-action="Decline" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-sm btn-danger">Відхилити</a>
-                    </td>
-                    <td>
-                        <a type="button" asp-action="Returned" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-sm btn-warning">Повернення</a>
                     </td>
                 </tr>
             }

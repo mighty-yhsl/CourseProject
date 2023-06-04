@@ -20,9 +20,9 @@ namespace CourseProject.BLL.Repositories
         private const string CREATE_QUERY = "INSERT INTO CustomerOrder (Description, CreateDate, UpdateDate, SellerId, StatusId, CustomerId) OUTPUT INSERTED.ID, SCOPE_IDENTITY() VALUES (@Description, @CreateDate, @UpdateDate, @SellerId, @StatusId, @CustomerId)";
         private const string DELETE_QUERY = "DELETE FROM CustomerOrder WHERE Id = @Id";
         private const string DELETE_QUERY_DETAILS = "DELETE FROM OrderDetails WHERE TransportId = @TransportId AND CustomerOrderId = @CustomerOrderId";
-        private const string UPDATE_QUERY = "UPDATE CustomerOrders SET Description = @Description, CreateDate = @CreateDate, UpdateDate = @UpdateDate, SellerId = @SellerId, CustomerId = @CustomerId, StatusId = @StatusId WHERE Id = @Id";
+        private const string UPDATE_QUERY = "UPDATE CustomerOrder SET Description = @Description, CreateDate = @CreateDate, UpdateDate = @UpdateDate, SellerId = @SellerId, CustomerId = @CustomerId, StatusId = @StatusId WHERE Id = @Id";
         private const string UPDATE_QUERY_DETAILS = "UPDATE OrderDetails SET TotalAmount = @TotalAmount, TotalPrice = @TotalPrice WHERE CustomerOrderId = @CustomerOrderId, TransportId = @TransportId";
-        private const string GET_BY_ID_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetail_Id, od.TotalAmount, od.TotalPrice, od.CustomerOrderId, od.TransportId, so.Id AS Status_Id, so.Name FROM CustomerOrders co LEFT JOIN OrderDetails od ON co.Id = od.CustomerOrderId LEFT JOIN StatusOrders so ON co.StatusId = so.Id LEFT JOIN Transports t ON od.TransportId = t.Id WHERE co.Id = @Id";
+        private const string GET_BY_ID_QUERY = "SELECT co.Id, co.Description, co.CreateDate, co.UpdateDate, co.SellerId, co.CustomerId, co.StatusId, od.Id AS OrderDetail_Id, od.TotalAmount, od.TotalPrice, od.CustomerOrderId, od.TransportId, so.Id AS Status_Id, so.StatusOrderName, t.Name AS Transport_Name FROM CustomerOrder co LEFT JOIN OrderDetails od ON co.Id = od.CustomerOrderId LEFT JOIN Transport t ON od.TransportId = t.Id LEFT JOIN StatusOrder so ON co.StatusId = so.Id WHERE co.Id = @Id";
         private const string GET_QUERY = "SELECT co.Id, c.CustomerName,c.CustomerSurname, c.Addres, c.Email, c.Phone, co.Description, co.CreateDate, co.UpdateDate, so.StatusOrderName,so.StatusOrderName, od.TotalAmount, od.TotalPrice FROM CustomerOrder co JOIN Customer c ON co.CustomerId = c.Id JOIN OrderDetails od ON co.Id = od.CustomerOrderId JOIN StatusOrder so ON co.StatusId = so.Id";
         private const string GET_QUERY_DETAILS = "SELECT TransportId, CustomerOrderId, TotalAmount, OrderDetails.TotalPrice, Transport.Name as 'Title' FROM OrderDetails INNER JOIN Transport ON OrderDetails.TransportId = Transport.Id WHERE CustomerOrderId = @CustomerOrderId AND TransportId = @TransportId";
         private const string CREATE_QUERY_ORDERDETAIL = "INSERT INTO OrderDetails (TotalAmount, TotalPrice, CustomerOrderId, TransportId) VALUES (@TotalAmount, @TotalPrice, @CustomerOrderId, @TransportId)";
@@ -30,7 +30,7 @@ namespace CourseProject.BLL.Repositories
         {
 
         }
-
+       
         public OrderRepository() { }
 
 
@@ -104,19 +104,20 @@ namespace CourseProject.BLL.Repositories
                         {
                             customerOrder = new CustomerOrder
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Description = reader.GetString(reader.GetOrdinal("Description")),
-                                CreateDate = reader.GetDateTime(reader.GetOrdinal("CreateDate")),
-                                UpdateDate = reader.GetDateTime(reader.GetOrdinal("UpdateDate")),
-                                SellerId = reader.GetInt32(reader.GetOrdinal("SellerId")),
-                                CustomerId = reader.GetInt32(reader.GetOrdinal("CustomerId")),
-                                StatusId = reader.GetInt32(reader.GetOrdinal("StatusId")),
+                                Id = GetInt32Value(reader, "Id"),
+                                Description = GetString(reader, "Description"),
+                                CreateDate = GetDateTimeValue(reader, "CreateDate"),
+                                UpdateDate = GetDateTimeValue(reader, "UpdateDate"),
+                                SellerId = GetInt32Value(reader, "SellerId"),
+                                CustomerId = GetInt32Value(reader, "CustomerId"),
+                                StatusId = GetInt32Value(reader, "StatusId"),
                                 OrderDetails = new List<OrderDetail>
                         {
                             new OrderDetail
                             {
-                                TotalAmount = reader.GetInt32(reader.GetOrdinal("TotalAmount")),
-                                TotalPrice = reader.GetDecimal(reader.GetOrdinal("TotalPrice"))
+                                TotalAmount = GetInt32Value(reader, "TotalAmount"),
+                                TotalPrice = GetDecimalValue(reader, "TotalPrice"),
+                              
                             }
                         }
                             };
@@ -126,6 +127,26 @@ namespace CourseProject.BLL.Repositories
             }
 
             return customerOrder;
+        }
+
+        private int GetInt32Value(SqlDataReader reader, string columnName)
+        {
+            return reader.IsDBNull(reader.GetOrdinal(columnName)) ? 0 : reader.GetInt32(reader.GetOrdinal(columnName));
+        }
+
+        private string GetString(SqlDataReader reader, string columnName)
+        {
+            return reader.IsDBNull(reader.GetOrdinal(columnName)) ? string.Empty : reader.GetString(reader.GetOrdinal(columnName));
+        }
+
+        private DateTime GetDateTimeValue(SqlDataReader reader, string columnName)
+        {
+            return reader.IsDBNull(reader.GetOrdinal(columnName)) ? DateTime.MinValue : reader.GetDateTime(reader.GetOrdinal(columnName));
+        }
+
+        private decimal GetDecimalValue(SqlDataReader reader, string columnName)
+        {
+            return reader.IsDBNull(reader.GetOrdinal(columnName)) ? 0 : reader.GetDecimal(reader.GetOrdinal(columnName));
         }
 
 
@@ -240,7 +261,7 @@ namespace CourseProject.BLL.Repositories
             new SqlParameter("@UpdateDate", entity.UpdateDate),
             new SqlParameter("@SellerId", entity.SellerId),
             new SqlParameter("@CustomerId", entity.CustomerId),
-            new SqlParameter("@StatusId", entity.StatusId),
+            new SqlParameter("@StatusId", entity.StatusOrder.Id),
             new SqlParameter("@Id", entity.Id)
             };
 
