@@ -21,9 +21,9 @@ namespace CourseProject.Controllers
             this.transportService = transportService;
         }
 
-        public ActionResult Complete()
+        public ActionResult Complete(int id)
         {
-            return View();
+            return View(id);
         }
 
         public ActionResult Details([FromServices] SellerService sellerService, [FromServices] OrderService customerOrderService, int id )
@@ -48,7 +48,7 @@ namespace CourseProject.Controllers
         {
             return View(orderRepository.Get());
         }
-
+        /*
         public ActionResult Edit(int id)
         {
             var order = customerOrderService.Get(id);
@@ -85,7 +85,7 @@ namespace CourseProject.Controllers
 
             return RedirectToAction(controllerName: "Order", actionName: "Details");
         }
-
+        */
         public ActionResult Create([FromServices] CustomerService customerService)
         {
             var model = new OrderVM()
@@ -136,11 +136,11 @@ namespace CourseProject.Controllers
                 }).ToList()
             };
 
-            orderService.CreateOrder(order);
+           var id =  orderService.CreateOrder(order);
 
             HttpContext.Session.Clear();
 
-            return RedirectToAction("Complete", "Order");
+            return RedirectToAction("Complete", "Order",new { id = id});
         }
 
         public ActionResult Decrease([FromServices] OrderService orderService, int transportId, int customerOrderId)
@@ -240,6 +240,67 @@ namespace CourseProject.Controllers
             }
 
             return RedirectToAction("GetAllOrders", "Order");
+        }
+
+        public ActionResult Delete([FromServices] OrderService orderService, int id)
+        {
+            try
+            {
+                orderService.DeleteOrder(id);
+                return Redirect("/order/GetAllOrders");
+            }
+            catch (ArgumentException ex)
+            {
+                return Redirect("/order/GetAllOrders");
+            }
+        }
+
+        public ActionResult GetOrderName([FromServices] OrderService orderService, OrderVM model)
+        {
+            try
+            {
+                    CustomerOrder order = orderService.GetOrderName(model.Id);
+                    if (order != null)
+                    {
+                        var orderList = new List<CustomerOrder> { order };
+                        return View(orderList);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Order not found !");
+                    }
+
+                return Redirect("/order/GetAllOrders");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewData["Exception"] = ex.Message;
+                return View("/order/GetAllOrders");
+            }
+        }
+
+        public ActionResult GetOName([FromServices] OrderService orderService, OrderVM model)
+        {
+            try
+            {
+                CustomerOrder order = orderService.GetOrderName(model.Id);
+                if (order != null)
+                {
+                    var orderList = new List<CustomerOrder> { order };
+                    return View(orderList);
+                }
+                else
+                {
+                    Console.WriteLine("Order not found !");
+                }
+
+                return Redirect("/order/Get");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewData["Exception"] = ex.Message;
+                return View("/order/Get");
+            }
         }
     }
 }

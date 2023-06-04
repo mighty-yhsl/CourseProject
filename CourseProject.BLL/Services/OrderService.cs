@@ -24,7 +24,7 @@ namespace CourseProject.BLL.Services
             _transportRepository = transportRepository; 
         }
         
-        public void CreateOrder(CustomerOrder order)
+        public int CreateOrder(CustomerOrder order)
         {
             try
             {
@@ -34,8 +34,8 @@ namespace CourseProject.BLL.Services
             {
                 throw new InvalidOperationException($"Order not Created");
             }
-
-            _orderRepository.Create(order);
+            
+            return _orderRepository.CreateScalar(order);
         }
 
         public void CreateDetails(OrderDetail detail)
@@ -113,6 +113,14 @@ namespace CourseProject.BLL.Services
         public CustomerOrder Get(int id)
         {
             return _orderRepository.Get(id);
+
+        }
+        public CustomerOrder GetOrderName(int id)
+        {
+            var order = _orderRepository.Get(id);
+            if (order is null)
+                throw new InvalidOperationException($"Товар з таким '{id}' не знайдено");
+            return order;
         }
 
         public void AddDetails(int transportId, int customerOrderId)

@@ -10,8 +10,8 @@
 </style>
 
 <h1 class="center">Перелік замовлень</h1>
-<form asp-action="GetOName" asp-controller="Order">
-    <input type="text" name="Id" placeholder="Пошук замовлення за номером" style="width:500px" />
+<form asp-action="GetOrderName" asp-controller="Order">
+    <input type="text" name="Id" placeholder="Пошук за  Id замовлення" style="width:500px" />
     <button type="submit" class="search-btn">Знайти</button>
 </form>
 <table class="table">
@@ -75,6 +75,15 @@
                         @Html.DisplayFor(modelItem => order.StatusOrder.StatusOrderName)
                     </td>
                     <td>
+                        <a type="button" asp-action="Confirm" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-lg btn-success">Підтвердити</a>
+                        <a type="button" asp-action="Decline" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-lg btn-danger mt-2">Відхилити</a>
+                    </td>
+                    <td>
+                        <a type="button" asp-action="Returned" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-lg btn-warning">Повернення</a>
+                        <a type="button" asp-action="Rent" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-lg btn-info mt-2">В оренді</a>
+                    </td>
+                    <td>
+                        <a type="button" asp-action="Delete" asp-controller="Order" asp-route-id="@order.Id" class="btn btn-lg btn-dark ">Видалити</a>
                     </td>
                 </tr>
             }
