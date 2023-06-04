@@ -224,5 +224,22 @@ namespace CourseProject.Controllers
 
             return RedirectToAction("GetAllOrders", "Order");
         }
+
+        public ActionResult Rent([FromServices] OrderService orderService, int id)
+        {
+            var customerOrder = orderService.Get(id);
+
+            if (customerOrder != null)
+            {
+                if (customerOrder.StatusOrder == null)
+                {
+                    customerOrder.StatusOrder = new StatusOrder();
+                }
+                customerOrder.StatusOrder.Id = 4;
+                orderService.Update(customerOrder);
+            }
+
+            return RedirectToAction("GetAllOrders", "Order");
+        }
     }
 }
