@@ -21,9 +21,9 @@ namespace CourseProject.Controllers
             this.transportService = transportService;
         }
 
-        public ActionResult Complete()
+        public ActionResult Complete(int id)
         {
-            return View();
+            return View(id);
         }
 
         public ActionResult Details([FromServices] SellerService sellerService, [FromServices] OrderService customerOrderService, int id )
@@ -136,11 +136,11 @@ namespace CourseProject.Controllers
                 }).ToList()
             };
 
-            orderService.CreateOrder(order);
+           var id =  orderService.CreateOrder(order);
 
             HttpContext.Session.Clear();
 
-            return RedirectToAction("Complete", "Order");
+            return RedirectToAction("Complete", "Order",new { id = id});
         }
 
         public ActionResult Decrease([FromServices] OrderService orderService, int transportId, int customerOrderId)

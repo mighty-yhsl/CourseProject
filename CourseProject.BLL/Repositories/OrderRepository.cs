@@ -33,6 +33,35 @@ namespace CourseProject.BLL.Repositories
        
         public OrderRepository() { }
 
+        public  int CreateScalar(CustomerOrder entity)
+        {
+            var parameters = new List<SqlParameter>()
+             {
+                 new SqlParameter("@CreateDate", entity.CreateDate),
+                 new SqlParameter("@UpdateDate", entity.UpdateDate),
+                new SqlParameter("@SellerId", entity.SellerId),
+                 new SqlParameter("@StatusId", entity.StatusId),
+                 new SqlParameter("@CustomerId", entity.Customer.Id),
+                 new SqlParameter("@Description", entity.Description.IsNullOrEmpty() ? DBNull.Value : (object)entity.Description)
+            };
+
+            var outputCustomerIdParameter = new SqlParameter("@InsertedCustomerId", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
+            parameters.Add(outputCustomerIdParameter);
+
+            var id = ExecuteScalarCommand(CREATE_QUERY, parameters.ToArray());
+
+            foreach (var item in entity.OrderDetails)
+            {
+                item.CustomerOrderId = (int)id;
+                CreateDetails(item);
+            }
+
+            return (int)id;
+
+        }
 
         public override void Create(CustomerOrder entity)
         {

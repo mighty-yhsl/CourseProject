@@ -24,7 +24,7 @@ namespace CourseProject.BLL.Services
             _transportRepository = transportRepository; 
         }
         
-        public void CreateOrder(CustomerOrder order)
+        public int CreateOrder(CustomerOrder order)
         {
             try
             {
@@ -34,8 +34,8 @@ namespace CourseProject.BLL.Services
             {
                 throw new InvalidOperationException($"Order not Created");
             }
-
-            _orderRepository.Create(order);
+            
+            return _orderRepository.CreateScalar(order);
         }
 
         public void CreateDetails(OrderDetail detail)
