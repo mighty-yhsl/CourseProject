@@ -22,7 +22,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
                         </li>
-                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("Get") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTName") || ViewContext.RouteData.Values["action"].ToString().Equals("Privacy") || ViewContext.RouteData.Values["action"].ToString().Equals("Contacts") || ViewContext.RouteData.Values["action"].ToString().Equals("AboutUs"))
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("Get") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTName") || ViewContext.RouteData.Values["action"].ToString().Equals("Privacy") || ViewContext.RouteData.Values["action"].ToString().Equals("Contacts") || ViewContext.RouteData.Values["action"].ToString().Equals("AboutUs") || ViewContext.RouteData.Values["action"].ToString().Equals("GetOName"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="Get">Каталог</a>
@@ -37,13 +37,14 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">Про нас</a>
                             </li>
                             <li class="nav-item ml-auto">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Details">Кошик</a>
-                            </li>
-                            <li class="nav-item ml-auto">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Get">Перелік замовлень</a>
                             </li>
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Details">Кошик</a>
+                            </li>
+                           
                         }
-                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("GetAllTransports") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllSeller") || ViewContext.RouteData.Values["action"].ToString().Equals("GetSellerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTransportName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllCustomer") || ViewContext.RouteData.Values["action"].ToString().Equals("GetCustomerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllOrders"))
+                        @if (ViewContext.RouteData.Values["action"].ToString().Equals("GetAllTransports") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllSeller") || ViewContext.RouteData.Values["action"].ToString().Equals("GetSellerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetTransportName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllCustomer") || ViewContext.RouteData.Values["action"].ToString().Equals("GetCustomerName") || ViewContext.RouteData.Values["action"].ToString().Equals("GetAllOrders") || ViewContext.RouteData.Values["action"].ToString().Equals("GetOrderName"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Transport" asp-action="GetAllTransports">Каталог</a>

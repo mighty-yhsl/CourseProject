@@ -113,6 +113,14 @@ namespace CourseProject.BLL.Services
         public CustomerOrder Get(int id)
         {
             return _orderRepository.Get(id);
+
+        }
+        public CustomerOrder GetOrderName(int id)
+        {
+            var order = _orderRepository.Get(id);
+            if (order is null)
+                throw new InvalidOperationException($"Товар з таким '{id}' не знайдено");
+            return order;
         }
 
         public void AddDetails(int transportId, int customerOrderId)
