@@ -18,11 +18,13 @@ namespace CourseProject.BLL.Services
         private TransportValidator _transportValidator;
         private TransportRepository _transportRepository;
 
+
         public TransportService(TransportRepository transportRepository, TransportValidator transportValidator)
         {
             _transportValidator = transportValidator;
             _transportRepository = transportRepository;
         }
+       
         public void CreateTransport(Transport transport)
         {
             try
@@ -36,7 +38,7 @@ namespace CourseProject.BLL.Services
 
             _transportRepository.Create(transport);
         }
-
+        
         public void UpdateTransport(Transport transport)
         {
             try

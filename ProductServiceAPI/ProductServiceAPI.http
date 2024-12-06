@@ -1,0 +1,54 @@
+﻿### Обновить транспортное средство (PUT)
+PUT http://localhost:5021/api/Product/11
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": 11,
+  "name": "Apple Board",
+  "speed": 25,
+  "weightt": 14,
+  "enginePower": 300,
+  "amount": 30,
+  "price": 18999,
+  "categoryId": 2,
+  "manufacturerId": 1,
+  "category": {
+    "id": 2,
+    "categoryName": "Електросамокати",
+    "transports": []
+  },
+  "manufacturer": {
+    "id": 1,
+    "manufacturerName": "Xiaomi",
+    "transports": []
+  },
+  "orderDetails": []
+}
+
+### Создать новое транспортное средство (POST)
+POST http://localhost:5021/api/Product
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Evo 10",
+  "speed": 55,
+  "weightt": 14,
+  "enginePower": 300,
+  "amount": 10,
+  "price": 77999,
+  "categoryId": 1,
+  "manufacturerId": 5,
+  "category": {
+    "id": 2,
+    "categoryName": "Електросамокати",
+    "transports": []
+  },
+  "manufacturer": {
+    "id": 2,
+    "manufacturerName": "Ninebot",
+    "transports": []
+  },
+  "orderDetails": []
+}
