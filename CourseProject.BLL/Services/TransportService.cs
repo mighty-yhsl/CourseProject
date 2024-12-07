@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Runtime.Serialization.Formatters;
-using System.Threading.Tasks;
-using CourseProject.BLL.Interfaces;
 using CourseProject.BLL.Repositories;
 using CourseProject.DAL.Models.EF;
 using CourseProject.BLL.Validators;
-using Azure;
+
 
 namespace CourseProject.BLL.Services
 {

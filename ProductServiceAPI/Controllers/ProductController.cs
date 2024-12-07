@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CourseProject.BLL.Repositories;
 using CourseProject.DAL.Models.EF;
-using CourseProject.BLL.Validators;
 using CourseProject.BLL.Services;
-using System.Collections.Generic;
+
 
 namespace ProductServiceAPI.Controllers
 {

@@ -1,17 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CourseProject.DAL.Models.EF;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Reflection.Metadata;
-using System.Diagnostics;
-using System.Data;
+
 
 namespace CourseProject.BLL.Repositories
 {
@@ -31,7 +22,6 @@ namespace CourseProject.BLL.Repositories
         
         public TransportRepository() { }
   
-
         public override void Create(Transport entity)
         {
             if (entity == null)
