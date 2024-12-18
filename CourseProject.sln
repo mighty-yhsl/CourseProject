@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseProject.DAL", "Course
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseProject.BLL", "CourseProject.BLL\CourseProject.BLL.csproj", "{69E6B300-5297-4F5B-8B2D-F9AC36450599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductServiceAPI", "ProductServiceAPI\ProductServiceAPI.csproj", "{212E2D66-2104-4BE7-A25B-DF7A4F4AC65F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductServiceAPI", "ProductServiceAPI\ProductServiceAPI.csproj", "{212E2D66-2104-4BE7-A25B-DF7A4F4AC65F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductControllerTests", "ProductControllerTests\ProductControllerTests.csproj", "{EB4A7065-E719-4FF7-9086-5C3E42FA94AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{212E2D66-2104-4BE7-A25B-DF7A4F4AC65F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{212E2D66-2104-4BE7-A25B-DF7A4F4AC65F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{212E2D66-2104-4BE7-A25B-DF7A4F4AC65F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB4A7065-E719-4FF7-9086-5C3E42FA94AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB4A7065-E719-4FF7-9086-5C3E42FA94AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB4A7065-E719-4FF7-9086-5C3E42FA94AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB4A7065-E719-4FF7-9086-5C3E42FA94AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
