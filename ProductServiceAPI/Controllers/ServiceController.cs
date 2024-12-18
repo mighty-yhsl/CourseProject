@@ -149,6 +149,57 @@ public class ServiceController : ControllerBase
         }
     }
 
+    [HttpGet("GetByName/{serviceName}")]
+    public async Task<IActionResult> GetByName(string serviceName)
+    {
+        if (string.IsNullOrWhiteSpace(serviceName))
+        {
+            return BadRequest("Service name is required.");
+        }
+
+        var service = new ServiceWithStatus();
+
+        try
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT s.ServiceId, s.ServiceName, s.Description, s.CreatedDate, s.UpdatedDate, 
+                                    si.ServiceStatusId, ss.ServiceStatusName
+                             FROM Service s
+                             LEFT JOIN ServiceInstance si ON s.ServiceId = si.ServiceId
+                             LEFT JOIN ServiceStatus ss ON si.ServiceStatusId = ss.ServiceStatusId
+                             WHERE s.ServiceName = @ServiceName";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ServiceName", serviceName);
+                await conn.OpenAsync();
+
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        service.ServiceId = (int)reader["ServiceId"];
+                        service.ServiceName = reader["ServiceName"].ToString();
+                        service.Description = reader["Description"].ToString();
+                        service.CreatedDate = (DateTime)reader["CreatedDate"];
+                        service.UpdatedDate = (DateTime)reader["UpdatedDate"];
+                        service.ServiceStatusId = (int)reader["ServiceStatusId"];
+                        service.ServiceStatusName = reader["ServiceStatusName"].ToString();
+                    }
+                    else
+                    {
+                        return NotFound("Service not found.");
+                    }
+                }
+            }
+
+            return Ok(service);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
     [HttpPut("UpdateService")]
     public IActionResult UpdateService(int? serviceId, string serviceName, string description, string address, bool status)
     {
@@ -227,6 +278,7 @@ public class ServiceController : ControllerBase
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+
     }
 }
 
