@@ -93,9 +93,10 @@ public class ServiceController : ControllerBase
         {
             await conn.OpenAsync();
             string query = @"
-            UPDATE ServiceInstance 
-            SET ServiceStatusId = @StatusId 
-            WHERE ServiceId = @ServiceId";
+        UPDATE ServiceInstance 
+        SET ServiceStatusId = @StatusId,
+            UpdatedDate = GETDATE() -- Оновлення часу на поточний
+        WHERE ServiceId = @ServiceId";
 
             using (var cmd = new SqlCommand(query, conn))
             {
@@ -107,7 +108,7 @@ public class ServiceController : ControllerBase
     }
 
 
-[HttpPost("CreateService")]
+    [HttpPost("CreateService")]
     public IActionResult CreateService(string serviceName, string description, string address)
     {
         if (string.IsNullOrWhiteSpace(serviceName))
